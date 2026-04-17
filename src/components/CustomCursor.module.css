@@ -1,0 +1,54 @@
+.cursorDot {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 12px;
+    height: 12px;
+    background-color: var(--brand);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99999;
+    margin-top: -6px;
+    margin-left: -6px;
+    transition: opacity 0.3s ease, background-color 0.3s ease;
+}
+
+.dotHovering {
+    opacity: 0;
+}
+
+.cursorOutline {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 50px;
+    height: 50px;
+    border: 2px solid rgba(240, 150, 32, 0.4);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99998;
+    margin-top: -25px;
+    margin-left: -25px;
+    transition: width 0.3s ease, height 0.3s ease, background-color 0.3s ease, margin 0.3s ease, border-color 0.3s ease;
+}
+
+.hovering {
+    width: 80px;
+    height: 80px;
+    margin-top: -40px;
+    margin-left: -40px;
+    background-color: rgba(240, 150, 32, 0.08);
+    /* slight fill */
+    border-color: rgba(240, 150, 32, 0.8);
+    backdrop-filter: invert(10%);
+    /* Add a highly subtle inverse filter to standard hovers for premium feel */
+}
+
+.clicking {
+    width: 36px;
+    height: 36px;
+    margin-top: -18px;
+    margin-left: -18px;
+    background-color: rgba(240, 150, 32, 0.3);
+    border-color: transparent;
+}
