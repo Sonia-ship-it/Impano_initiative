@@ -1,0 +1,176 @@
+.section {
+    padding: 120px 24px;
+    position: relative;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 64px;
+}
+
+.sectionLabel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.labelLine {
+    width: 32px;
+    height: 2px;
+    background: var(--brand);
+    border-radius: 2px;
+}
+
+.sectionLabel span {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 3px;
+    color: var(--brand);
+}
+
+.heading {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 800;
+    font-size: clamp(32px, 4vw, 48px);
+    color: var(--white);
+    letter-spacing: -0.5px;
+    margin-bottom: 16px;
+}
+
+.headerSub {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 300;
+    font-size: 17px;
+    color: var(--gray-500);
+    max-width: 480px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
+}
+
+.card {
+    position: relative;
+    border-radius: 24px;
+    overflow: hidden;
+}
+
+.cardInner {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 24px;
+    padding: 40px 20px 36px;
+    text-align: center;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.cardInner:hover {
+    transform: translateY(-8px);
+    border-color: rgba(240, 150, 32, 0.12);
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    border: 2px solid;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.cardInner:hover .avatar {
+    transform: scale(1.08);
+}
+
+.initials {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 800;
+    font-size: 24px;
+    letter-spacing: 1px;
+}
+
+.avatarRing {
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    border: 1px solid;
+    opacity: 0;
+    transition: all 0.4s ease;
+}
+
+.cardInner:hover .avatarRing {
+    opacity: 1;
+    inset: -8px;
+}
+
+.name {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--white);
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+}
+
+.role {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    color: var(--gray-500);
+    line-height: 1.5;
+}
+
+.hoverBar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.cardInner:hover .hoverBar {
+    opacity: 1;
+}
+
+@media (max-width: 1024px) {
+    .grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+
+    .section {
+        padding: 80px 20px;
+    }
+
+    .cardInner {
+        padding: 32px 16px 28px;
+    }
+}

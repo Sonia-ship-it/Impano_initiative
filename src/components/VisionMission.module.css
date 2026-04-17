@@ -1,0 +1,225 @@
+.section {
+    padding: 120px 24px;
+    position: relative;
+    overflow: hidden;
+}
+
+.bgDecor {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.bgLine1 {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 1px;
+    height: 100%;
+    background: linear-gradient(to bottom, transparent, rgba(240, 150, 32, 0.06), transparent);
+}
+
+.bgLine2 {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.03), transparent);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 64px;
+}
+
+.sectionLabel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.labelLine {
+    width: 32px;
+    height: 2px;
+    background: var(--brand);
+    border-radius: 2px;
+}
+
+.sectionLabel span {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 3px;
+    color: var(--brand);
+}
+
+.heading {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 800;
+    font-size: clamp(32px, 4vw, 52px);
+    color: var(--white);
+    letter-spacing: -0.5px;
+    margin-bottom: 16px;
+}
+
+.headerSub {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 300;
+    font-size: 17px;
+    color: var(--gray-500);
+    max-width: 500px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+/* Cards */
+.cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+}
+
+.card {
+    position: relative;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 28px;
+    padding: 48px 40px;
+    overflow: hidden;
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    border-color: rgba(240, 150, 32, 0.15);
+}
+
+.missionCard:hover {
+    border-color: rgba(45, 122, 58, 0.2);
+}
+
+.cardGlow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(240, 150, 32, 0.3), transparent);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.card:hover .cardGlow {
+    opacity: 1;
+}
+
+.missionCard .cardGlow {
+    background: linear-gradient(90deg, transparent, rgba(45, 122, 58, 0.3), transparent);
+}
+
+.cardIcon {
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(240, 150, 32, 0.06);
+    border: 1px solid rgba(240, 150, 32, 0.1);
+    border-radius: 20px;
+    margin-bottom: 28px;
+    transition: all 0.3s ease;
+}
+
+.missionCard .cardIcon {
+    background: rgba(45, 122, 58, 0.06);
+    border-color: rgba(45, 122, 58, 0.1);
+}
+
+.card:hover .cardIcon {
+    transform: scale(1.05);
+    box-shadow: 0 8px 24px rgba(240, 150, 32, 0.1);
+}
+
+.missionCard:hover .cardIcon {
+    box-shadow: 0 8px 24px rgba(45, 122, 58, 0.1);
+}
+
+.cardLabel {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--brand);
+    margin-bottom: 16px;
+}
+
+.greenLabel {
+    color: var(--green-light);
+}
+
+.cardTitle {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: 28px;
+    color: var(--white);
+    line-height: 1.2;
+    margin-bottom: 20px;
+}
+
+.brandText {
+    color: var(--brand);
+}
+
+.greenTextHighlight {
+    color: var(--green-light);
+}
+
+.cardText {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 300;
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--gray-400);
+}
+
+.cardAccent {
+    position: absolute;
+    bottom: -60px;
+    right: -60px;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(240, 150, 32, 0.04) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.greenAccent {
+    background: radial-gradient(circle, rgba(45, 122, 58, 0.04) 0%, transparent 70%);
+}
+
+@media (max-width: 768px) {
+    .section {
+        padding: 80px 20px;
+    }
+
+    .cards {
+        grid-template-columns: 1fr;
+    }
+
+    .card {
+        padding: 36px 28px;
+    }
+
+    .cardTitle {
+        font-size: 24px;
+    }
+}

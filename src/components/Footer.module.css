@@ -1,0 +1,158 @@
+.footer {
+    position: relative;
+    padding: 80px 24px 40px;
+    background: rgba(255, 255, 255, 0.01);
+}
+
+.topBorder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(240, 150, 32, 0.15), rgba(45, 122, 58, 0.1), transparent);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.top {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1.5fr;
+    gap: 64px;
+    margin-bottom: 60px;
+}
+
+.brand {
+    max-width: 360px;
+}
+
+.logoRow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.logoImg {
+    width: 44px;
+    height: 44px;
+    object-fit: contain;
+}
+
+.logoTitle {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 800;
+    font-size: 18px;
+    letter-spacing: 2px;
+    color: var(--brand);
+    line-height: 1.1;
+}
+
+.logoSub {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 400;
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: var(--gray-500);
+    text-transform: uppercase;
+}
+
+.brandDesc {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 1.8;
+    color: var(--gray-500);
+}
+
+.colTitle {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--white);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+}
+
+.linksCol,
+.contactCol {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.footerLink {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    color: var(--gray-500);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    word-break: break-all;
+}
+
+.footerLink:hover {
+    color: var(--brand);
+    transform: translateX(4px);
+}
+
+.bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 32px;
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.copyright {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 400;
+    font-size: 13px;
+    color: var(--gray-600);
+}
+
+.madeWith {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 400;
+    font-size: 13px;
+    color: var(--gray-600);
+}
+
+.heart {
+    color: var(--brand);
+    animation: heartbeat 1.5s ease-in-out infinite;
+}
+
+@keyframes heartbeat {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.2);
+    }
+}
+
+@media (max-width: 768px) {
+    .top {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+
+    .footer {
+        padding: 60px 20px 32px;
+    }
+
+    .bottom {
+        flex-direction: column;
+        gap: 8px;
+        text-align: center;
+    }
+}
