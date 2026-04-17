@@ -27,6 +27,7 @@ export const metadata: Metadata = {
 
 import NoiseOverlay from "@/components/NoiseOverlay";
 import ScrollProgress from "@/components/ScrollProgress";
+import { ThemeProvider } from "@/components/ThemeProvider";
 
 export default function RootLayout({
   children,
@@ -34,14 +35,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <link rel="icon" href="/images/logo.png" />
       </head>
       <body>
-        <ScrollProgress />
-        <NoiseOverlay />
-        {children}
+        <ThemeProvider attribute="data-theme" defaultTheme="dark" enableSystem>
+          <ScrollProgress />
+          <NoiseOverlay />
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

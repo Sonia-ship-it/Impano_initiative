@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import { ThemeToggle } from "./ThemeToggle";
 import styles from "./Navbar.module.css";
 
 const navLinks = [
@@ -95,16 +96,20 @@ export default function Navbar() {
                     </a>
                 </div>
 
-                <button
-                    className={`${styles.hamburger} ${mobileOpen ? styles.open : ""}`}
-                    onClick={() => setMobileOpen(!mobileOpen)}
-                    aria-label="Toggle menu"
-                    id="nav-hamburger"
-                >
-                    <span />
-                    <span />
-                    <span />
-                </button>
+                <div className="flex items-center gap-4">
+                    <ThemeToggle />
+
+                    <button
+                        className={`${styles.hamburger} ${mobileOpen ? styles.open : ""}`}
+                        onClick={() => setMobileOpen(!mobileOpen)}
+                        aria-label="Toggle menu"
+                        id="nav-hamburger"
+                    >
+                        <span />
+                        <span />
+                        <span />
+                    </button>
+                </div>
             </div>
 
             {/* Mobile Menu */}

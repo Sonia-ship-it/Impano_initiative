@@ -18,7 +18,7 @@ const team = [
     },
     {
         name: "UMUTONIWASE GIFT",
-        role: "Financial & IT Support",
+        role: "Operation Manager",
         initials: "UG",
         color: "#f09620",
     },
@@ -29,9 +29,9 @@ const team = [
         color: "#3a9948",
     },
     {
-        name: "SONIA",
-        role: "Operation Manager",
-        initials: "SO",
+        name: "UWASE SONIA",
+        role: "Financial & IT Support",
+        initials: "US",
         color: "#f09620",
     },
 ];

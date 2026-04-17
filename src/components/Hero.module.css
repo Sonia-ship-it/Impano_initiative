@@ -56,8 +56,8 @@
     position: absolute;
     inset: 0;
     background-image:
-        linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+        linear-gradient(rgba(var(--white-rgb), 0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(var(--white-rgb), 0.015) 1px, transparent 1px);
     background-size: 60px 60px;
     pointer-events: none;
     mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black 30%, transparent 100%);
@@ -150,12 +150,12 @@
     text-decoration: none;
     border-radius: 100px;
     transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: 0 8px 32px rgba(240, 150, 32, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(240, 150, 32, 0.3), inset 0 1px 0 rgba(var(--white-rgb), 0.2);
 }
 
 .primaryBtn:hover {
     transform: translateY(-3px);
-    box-shadow: 0 12px 44px rgba(240, 150, 32, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    box-shadow: 0 12px 44px rgba(240, 150, 32, 0.4), inset 0 1px 0 rgba(var(--white-rgb), 0.2);
 }
 
 .secondaryBtn {
@@ -163,8 +163,8 @@
     align-items: center;
     gap: 10px;
     padding: 16px 36px;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(var(--white-rgb), 0.04);
+    border: 1px solid rgba(var(--white-rgb), 0.1);
     color: var(--white);
     font-family: 'Outfit', sans-serif;
     font-weight: 600;
@@ -175,8 +175,8 @@
 }
 
 .secondaryBtn:hover {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(255, 255, 255, 0.2);
+    background: rgba(var(--white-rgb), 0.08);
+    border-color: rgba(var(--white-rgb), 0.2);
     transform: translateY(-2px);
 }
 
@@ -187,8 +187,8 @@
     justify-content: center;
     gap: 40px;
     padding: 32px 48px;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(var(--white-rgb), 0.02);
+    border: 1px solid rgba(var(--white-rgb), 0.06);
     border-radius: 24px;
     backdrop-filter: blur(16px);
 }
@@ -220,7 +220,7 @@
 .statDivider {
     width: 1px;
     height: 40px;
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(var(--white-rgb), 0.08);
 }
 
 /* Scroll Indicator */
@@ -248,7 +248,7 @@
     width: 24px;
     height: 38px;
     border-radius: 14px;
-    border: 2px solid rgba(255, 255, 255, 0.15);
+    border: 2px solid rgba(var(--white-rgb), 0.15);
     position: relative;
 }
 
