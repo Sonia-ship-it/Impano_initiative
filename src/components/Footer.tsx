@@ -77,8 +77,7 @@ export default function Footer() {
                         reserved.
                     </p>
                     <p className={styles.madeWith}>
-                        Made with{" "}
-                        <span className={styles.heart}>♥</span> for the children
+                        Made for the children
                     </p>
                 </div>
             </div>
