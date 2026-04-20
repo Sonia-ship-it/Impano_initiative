@@ -33,6 +33,8 @@ import NoiseOverlay from "@/components/NoiseOverlay";
 import ScrollProgress from "@/components/ScrollProgress";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import CustomCursor from "@/components/CustomCursor";
+import { DonationProvider } from "@/context/DonationContext";
+import DonationModal from "@/components/DonationModal";
 
 export default function RootLayout({
   children,
@@ -43,10 +45,13 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body>
         <ThemeProvider attribute="data-theme" defaultTheme="dark" enableSystem>
-          <CustomCursor />
-          <ScrollProgress />
-          <NoiseOverlay />
-          {children}
+          <DonationProvider>
+            <CustomCursor />
+            <ScrollProgress />
+            <NoiseOverlay />
+            {children}
+            <DonationModal />
+          </DonationProvider>
         </ThemeProvider>
       </body>
     </html>

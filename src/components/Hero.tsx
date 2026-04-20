@@ -1,8 +1,10 @@
 "use client";
 import React from "react";
+import { useDonation } from "@/context/DonationContext";
 import styles from "./Hero.module.css";
 
 export default function Hero() {
+    const { openModal } = useDonation();
     return (
         <section className={styles.hero} id="home">
             {/* Animated Background Elements */}
@@ -34,7 +36,7 @@ export default function Hero() {
                 </p>
 
                 <div className={styles.actions}>
-                    <a href="#contact" className={styles.primaryBtn}>
+                    <button onClick={openModal} className={styles.primaryBtn}>
                         <span>Join Our Mission</span>
                         <svg
                             width="18"
@@ -48,7 +50,7 @@ export default function Hero() {
                         >
                             <path d="M5 12h14M12 5l7 7-7 7" />
                         </svg>
-                    </a>
+                    </button>
                     <a href="#about" className={styles.secondaryBtn}>
                         <span>Learn More</span>
                     </a>

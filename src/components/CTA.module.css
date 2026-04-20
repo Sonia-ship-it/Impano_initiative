@@ -101,6 +101,7 @@
     font-weight: 700;
     font-size: 15px;
     text-decoration: none;
+    border: none;
     border-radius: 100px;
     transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     box-shadow: 0 8px 32px rgba(240, 150, 32, 0.3);

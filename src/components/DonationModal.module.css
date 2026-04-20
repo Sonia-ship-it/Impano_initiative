@@ -1,0 +1,301 @@
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(12px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 20px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.overlayOpen {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal {
+    background: #0f0f0f;
+    width: 100%;
+    max-width: 480px;
+    border-radius: 28px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
+    transform: translateY(40px) scale(0.95);
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.overlayOpen .modal {
+    transform: translateY(0) scale(1);
+}
+
+.closeBtn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--white);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.3s ease;
+}
+
+.closeBtn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: rotate(90deg);
+}
+
+.content {
+    padding: 40px 32px;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.title {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 8px;
+}
+
+.subtitle {
+    font-size: 14px;
+    color: var(--gray-400);
+}
+
+/* Step 1: Selection */
+.methodGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.methodCard {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 24px 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.methodCard:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: var(--brand);
+    transform: translateY(-4px);
+}
+
+.methodActive {
+    background: rgba(var(--brand-rgb), 0.1) !important;
+    border-color: var(--brand) !important;
+}
+
+.methodIcon {
+    width: 40px;
+    height: 40px;
+    background: rgba(var(--brand-rgb), 0.1);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--brand);
+}
+
+.methodLabel {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--white);
+}
+
+/* Forms */
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--gray-400);
+}
+
+.input {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 14px 16px;
+    color: var(--white);
+    font-size: 15px;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.input:focus {
+    outline: none;
+    border-color: var(--brand);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+/* Security Trust */
+.trustArea {
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.trustText {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--gray-500);
+}
+
+.badgeRow {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    opacity: 0.6;
+}
+
+.badge {
+    height: 14px;
+    object-fit: contain;
+}
+
+/* Status Screen */
+.statusContainer {
+    text-align: center;
+    padding: 40px 0;
+}
+
+.statusIcon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.successIcon {
+    background: rgba(58, 153, 72, 0.1);
+    color: var(--green-light);
+}
+
+.errorIcon {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+}
+
+.statusTitle {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.statusDesc {
+    color: var(--gray-400);
+    line-height: 1.6;
+    margin-bottom: 32px;
+}
+
+.actionBtn,
+.secondaryBtn {
+    border: none;
+    border-radius: 100px;
+    padding: 16px 40px;
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.actionBtn {
+    background: var(--brand);
+    color: var(--dark);
+}
+
+.actionBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(var(--brand-rgb), 0.3);
+    background: var(--brand-light);
+}
+
+.actionBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.secondaryBtn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--white);
+    margin-top: 12px;
+}
+
+.secondaryBtn:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* Spinner */
+.spinner {
+    width: 24px;
+    height: 24px;
+    border: 3px solid rgba(0, 0, 0, 0.1);
+    border-top-color: currentColor;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

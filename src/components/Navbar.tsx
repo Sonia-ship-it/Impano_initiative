@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { ThemeToggle } from "./ThemeToggle";
+import { useDonation } from "@/context/DonationContext";
 import styles from "./Navbar.module.css";
 
 const navLinks = [
@@ -17,6 +18,7 @@ export default function Navbar() {
     const [scrolled, setScrolled] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
     const [activeSection, setActiveSection] = useState("home");
+    const { openModal } = useDonation();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -45,6 +47,12 @@ export default function Navbar() {
         if (el) {
             el.scrollIntoView({ behavior: "smooth" });
         }
+    };
+
+    const handleDonateClick = (e: React.MouseEvent) => {
+        e.preventDefault();
+        setMobileOpen(false);
+        openModal();
     };
 
     return (
@@ -87,10 +95,7 @@ export default function Navbar() {
                     <a
                         href="#donate"
                         className={styles.donateBtn}
-                        onClick={(e) => {
-                            e.preventDefault();
-                            handleClick("#contact");
-                        }}
+                        onClick={handleDonateClick}
                     >
                         Donate Now
                     </a>
@@ -137,10 +142,7 @@ export default function Navbar() {
                     <a
                         href="#donate"
                         className={styles.mobileDonate}
-                        onClick={(e) => {
-                            e.preventDefault();
-                            handleClick("#contact");
-                        }}
+                        onClick={handleDonateClick}
                     >
                         Donate Now
                     </a>
