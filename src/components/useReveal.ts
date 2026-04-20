@@ -1,10 +1,12 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useCallback } from "react";
+import { useLanguage } from "@/context/LanguageContext";
 
 export function useReveal() {
     const ref = useRef<HTMLDivElement>(null);
+    const { language } = useLanguage();
 
-    useEffect(() => {
+    const setupObserver = useCallback(() => {
         const observer = new IntersectionObserver(
             (entries) => {
                 entries.forEach((entry) => {
@@ -29,8 +31,13 @@ export function useReveal() {
             }
         }
 
-        return () => observer.disconnect();
+        return observer;
     }, []);
+
+    useEffect(() => {
+        const observer = setupObserver();
+        return () => observer.disconnect();
+    }, [language, setupObserver]);
 
     return ref;
 }

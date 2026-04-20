@@ -1,10 +1,13 @@
 "use client";
 import React from "react";
 import { useDonation } from "@/context/DonationContext";
+import { useLanguage } from "@/context/LanguageContext";
 import styles from "./Hero.module.css";
 
 export default function Hero() {
     const { openModal } = useDonation();
+    const { t } = useLanguage();
+
     return (
         <section className={styles.hero} id="home">
             {/* Animated Background Elements */}
@@ -18,26 +21,24 @@ export default function Hero() {
             <div className={styles.content}>
                 <div className={styles.badge}>
                     <span className={styles.badgeDot} />
-                    <span>Young Changemakers for a Brighter Future</span>
+                    <span>{t("hero.badge")}</span>
                 </div>
 
                 <h1 className={styles.title}>
-                    Nourishing Young
+                    {t("hero.titleLine1")}
                     <br />
-                    <span className="gradient-text">Minds</span>, Building
+                    <span className="gradient-text">{t("hero.titleLine2")}</span>{t("hero.titleLine2Suffix")}
                     <br />
-                    <span className={styles.greenText}>Brighter Futures</span>
+                    <span className={styles.greenText}>{t("hero.titleLine3")}</span>
                 </h1>
 
                 <p className={styles.subtitle}>
-                    We are dedicated to helping children from underprivileged backgrounds
-                    receive food at school, study in safety, and build a brighter future
-                    — because every child deserves the chance to thrive.
+                    {t("hero.subtitle")}
                 </p>
 
                 <div className={styles.actions}>
                     <button onClick={openModal} className={styles.primaryBtn}>
-                        <span>Join Our Mission</span>
+                        <span>{t("hero.ctaPrimary")}</span>
                         <svg
                             width="18"
                             height="18"
@@ -52,7 +53,7 @@ export default function Hero() {
                         </svg>
                     </button>
                     <a href="#about" className={styles.secondaryBtn}>
-                        <span>Learn More</span>
+                        <span>{t("hero.ctaSecondary")}</span>
                     </a>
                 </div>
 
@@ -60,17 +61,17 @@ export default function Hero() {
                 <div className={styles.statsRow}>
                     <div className={styles.stat}>
                         <span className={styles.statNum}>500+</span>
-                        <span className={styles.statLabel}>Children Fed</span>
+                        <span className={styles.statLabel}>{t("hero.stat1")}</span>
                     </div>
                     <div className={styles.statDivider} />
                     <div className={styles.stat}>
                         <span className={styles.statNum}>12</span>
-                        <span className={styles.statLabel}>Schools Reached</span>
+                        <span className={styles.statLabel}>{t("hero.stat2")}</span>
                     </div>
                     <div className={styles.statDivider} />
                     <div className={styles.stat}>
                         <span className={styles.statNum}>5</span>
-                        <span className={styles.statLabel}>Team Members</span>
+                        <span className={styles.statLabel}>{t("hero.stat3")}</span>
                     </div>
                 </div>
             </div>
@@ -80,7 +81,7 @@ export default function Hero() {
                 <div className={styles.scrollMouse}>
                     <div className={styles.scrollDot} />
                 </div>
-                <span>Scroll to explore</span>
+                <span>{t("hero.scroll")}</span>
             </div>
         </section>
     );

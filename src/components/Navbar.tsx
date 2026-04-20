@@ -2,30 +2,33 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { ThemeToggle } from "./ThemeToggle";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 import { useDonation } from "@/context/DonationContext";
+import { useLanguage } from "@/context/LanguageContext";
 import styles from "./Navbar.module.css";
 
-const navLinks = [
-    { label: "Home", href: "#home" },
-    { label: "About", href: "#about" },
-    { label: "Programs", href: "#programs" },
-    { label: "Vision", href: "#vision" },
-    { label: "Team", href: "#team" },
-    { label: "Contact", href: "#contact" },
-];
-
 export default function Navbar() {
+    const { t } = useLanguage();
     const [scrolled, setScrolled] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
     const [activeSection, setActiveSection] = useState("home");
     const { openModal } = useDonation();
+
+    const navLinks = [
+        { label: t("nav.home"), href: "#home" },
+        { label: t("nav.about"), href: "#about" },
+        { label: t("nav.programs"), href: "#programs" },
+        { label: t("nav.vision"), href: "#vision" },
+        { label: t("nav.team"), href: "#team" },
+        { label: t("nav.contact"), href: "#contact" },
+    ];
 
     useEffect(() => {
         const handleScroll = () => {
             setScrolled(window.scrollY > 40);
 
             // Determine active section
-            const sections = navLinks.map((l) => l.href.replace("#", ""));
+            const sections = ["home", "about", "programs", "vision", "team", "contact"];
             for (let i = sections.length - 1; i >= 0; i--) {
                 const el = document.getElementById(sections[i]);
                 if (el) {
@@ -71,7 +74,7 @@ export default function Navbar() {
                     />
                     <div className={styles.logoText}>
                         <span className={styles.logoTitle}>IMPANO</span>
-                        <span className={styles.logoSub}>INITIATIVE FUNDS</span>
+                        <span className={styles.logoSub}>{t("footer.tagline").split('IMPANO ')[1] || "INITIATIVE FUNDS"}</span>
                     </div>
                 </a>
 
@@ -97,11 +100,12 @@ export default function Navbar() {
                         className={styles.donateBtn}
                         onClick={handleDonateClick}
                     >
-                        Donate Now
+                        {t("nav.donate")}
                     </a>
                 </div>
 
                 <div className={styles.controls}>
+                    <LanguageSwitcher />
                     <ThemeToggle />
 
                     <button
@@ -144,15 +148,15 @@ export default function Navbar() {
                         className={styles.mobileDonate}
                         onClick={handleDonateClick}
                     >
-                        Donate Now
+                        {t("nav.donate")}
                     </a>
                 </div>
 
                 <div className={styles.menuFooter}>
-                    <div className={styles.footerLabel}>Impano Initiative</div>
+                    <div className={styles.footerLabel}>{t("footer.tagline")}</div>
                     <div className={styles.logoText} style={{ alignItems: 'center' }}>
                         <span className={styles.logoTitle} style={{ fontSize: '14px' }}>IMPANO</span>
-                        <span className={styles.logoSub} style={{ fontSize: '8px' }}>INITIATIVE FUNDS</span>
+                        <span className={styles.logoSub} style={{ fontSize: '8px' }}>{t("footer.tagline").split('IMPANO ')[1] || "INITIATIVE FUNDS"}</span>
                     </div>
                 </div>
             </div>

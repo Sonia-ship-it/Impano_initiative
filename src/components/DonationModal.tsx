@@ -1,7 +1,8 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useDonation } from "@/context/DonationContext";
-import { X, CreditCard, Smartphone, Lock, CheckCircle, AlertCircle, ShieldCheck } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
+import { X, CreditCard, Smartphone, Lock, CheckCircle, AlertCircle } from "lucide-react";
 import styles from "./DonationModal.module.css";
 import { useFlutterwave, closePaymentModal } from 'flutterwave-react-v3';
 
@@ -25,6 +26,7 @@ const MastercardIcon = () => (
 
 export default function DonationModal() {
     const { isOpen, closeModal } = useDonation();
+    const { t, language } = useLanguage();
     const [step, setStep] = useState<Step>("method");
     const [amount, setAmount] = useState("");
     const [momoPhone, setMomoPhone] = useState("");
@@ -49,7 +51,7 @@ export default function DonationModal() {
         },
         customizations: {
             title: 'Impano Initiative',
-            description: 'Donation for Children Nutrition',
+            description: t("donation.desc"),
             logo: 'https://impano.vercel.app/images/logo.png',
         },
     };
@@ -67,7 +69,6 @@ export default function DonationModal() {
 
         handleFlutterwavePayment({
             callback: (response) => {
-                console.log(response);
                 if (response.status === "successful") {
                     setTransactionId(response.transaction_id.toString());
                     setStep("success");
@@ -95,17 +96,17 @@ export default function DonationModal() {
                     {step === "method" && (
                         <>
                             <div className={styles.header}>
-                                <h3 className={styles.title}>Make a Donation</h3>
-                                <p className={styles.subtitle}>Choose your preferred payment method</p>
+                                <h3 className={styles.title}>{t("donation.title")}</h3>
+                                <p className={styles.subtitle}>{t("donation.desc")}</p>
                             </div>
                             <div className={styles.methodGrid}>
                                 <div className={styles.methodCard} onClick={() => setStep("momo")}>
                                     <div className={styles.methodIcon}><Smartphone /></div>
-                                    <span className={styles.methodLabel}>Mobile Money</span>
+                                    <span className={styles.methodLabel}>{t("donation.mobileMoney")}</span>
                                 </div>
                                 <div className={styles.methodCard} onClick={() => setStep("card")}>
                                     <div className={styles.methodIcon}><CreditCard /></div>
-                                    <span className={styles.methodLabel}>Credit Card</span>
+                                    <span className={styles.methodLabel}>{t("donation.cardPayment")}</span>
                                 </div>
                             </div>
                         </>
@@ -114,22 +115,22 @@ export default function DonationModal() {
                     {step === "momo" && (
                         <div className={styles.form}>
                             <div className={styles.header}>
-                                <h3 className={styles.title}>Mobile Money</h3>
-                                <p className={styles.subtitle}>Fast & Secure local payment</p>
+                                <h3 className={styles.title}>{t("donation.mobileMoney")}</h3>
+                                <p className={styles.subtitle}>{t("donation.momoDesc")}</p>
                             </div>
                             <div className={styles.inputGroup}>
-                                <label className={styles.label}>Amount (RWF)</label>
+                                <label className={styles.label}>{t("donation.amount")} (RWF)</label>
                                 <input
                                     type="number"
                                     className={styles.input}
-                                    placeholder="Enter amount"
+                                    placeholder={t("donation.custom")}
                                     value={amount}
                                     onChange={(e) => setAmount(e.target.value)}
                                     autoFocus
                                 />
                             </div>
                             <div className={styles.inputGroup}>
-                                <label className={styles.label}>Phone Number</label>
+                                <label className={styles.label}>{t("donation.phone")}</label>
                                 <input
                                     type="tel"
                                     className={styles.input}
@@ -139,20 +140,20 @@ export default function DonationModal() {
                                 />
                             </div>
                             <div className={styles.inputGroup}>
-                                <label className={styles.label}>Network (Optional)</label>
+                                <label className={styles.label}>{t("donation.network")}</label>
                                 <select className={styles.input} value={momoNetwork} onChange={(e) => setMomoNetwork(e.target.value)}>
                                     <option value="MTN">MTN Rwanda</option>
                                     <option value="Airtel">Airtel-Tigo</option>
                                 </select>
                             </div>
                             <button className={styles.actionBtn} onClick={handleProcessPayment}>
-                                Pay Now
+                                {t("donation.cta")}
                             </button>
                             <button className={styles.secondaryBtn} onClick={handleBack}>
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                     <path d="M19 12H5M12 19l-7-7 7-7" />
                                 </svg>
-                                <span>Go Back</span>
+                                <span>{t("donation.goBack")}</span>
                             </button>
                         </div>
                     )}
@@ -160,45 +161,45 @@ export default function DonationModal() {
                     {step === "card" && (
                         <div className={styles.form}>
                             <div className={styles.header}>
-                                <h3 className={styles.title}>Card Payment</h3>
-                                <p className={styles.subtitle}>Secure international payment</p>
+                                <h3 className={styles.title}>{t("donation.cardPayment")}</h3>
+                                <p className={styles.subtitle}>{t("donation.cardPaymentDesc")}</p>
                             </div>
                             <div className={styles.inputGroup}>
-                                <label className={styles.label}>Amount (RWF)</label>
+                                <label className={styles.label}>{t("donation.amount")} (RWF)</label>
                                 <input
                                     type="number"
                                     className={styles.input}
-                                    placeholder="Enter amount"
+                                    placeholder={t("donation.custom")}
                                     value={amount}
                                     onChange={(e) => setAmount(e.target.value)}
                                 />
                             </div>
                             <div className={styles.inputGroup}>
-                                <label className={styles.label}>Cardholder Name</label>
+                                <label className={styles.label}>{t("donation.name")}</label>
                                 <input type="text" className={styles.input} placeholder="John Doe" />
                             </div>
                             <div className={styles.inputGroup}>
-                                <label className={styles.label}>Card Number</label>
+                                <label className={styles.label}>{t("donation.cardNumber")}</label>
                                 <input type="text" className={styles.input} placeholder="**** **** **** ****" />
                             </div>
                             <div className={styles.row}>
                                 <div className={styles.inputGroup}>
-                                    <label className={styles.label}>Expiry Date</label>
+                                    <label className={styles.label}>{t("donation.expiry")}</label>
                                     <input type="text" className={styles.input} placeholder="MM / YY" />
                                 </div>
                                 <div className={styles.inputGroup}>
-                                    <label className={styles.label}>CVV</label>
+                                    <label className={styles.label}>{t("donation.cvv")}</label>
                                     <input type="text" className={styles.input} placeholder="123" />
                                 </div>
                             </div>
                             <button className={styles.actionBtn} onClick={handleProcessPayment}>
-                                Pay Now
+                                {t("donation.cta")}
                             </button>
                             <button className={styles.secondaryBtn} onClick={handleBack}>
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                     <path d="M19 12H5M12 19l-7-7 7-7" />
                                 </svg>
-                                <span>Go Back</span>
+                                <span>{t("donation.goBack")}</span>
                             </button>
                         </div>
                     )}
@@ -208,8 +209,8 @@ export default function DonationModal() {
                             <div className={styles.statusIcon} style={{ color: 'var(--brand)' }}>
                                 <div className={styles.spinner} />
                             </div>
-                            <h3 className={styles.statusTitle}>Processing Payment...</h3>
-                            <p className={styles.statusDesc}>Please wait while we securely process your donation.</p>
+                            <h3 className={styles.statusTitle}>{t("donation.processing")}</h3>
+                            <p className={styles.statusDesc}>{t("donation.processingDesc")}</p>
                         </div>
                     )}
 
@@ -218,13 +219,13 @@ export default function DonationModal() {
                             <div className={`${styles.statusIcon} ${styles.successIcon}`}>
                                 <CheckCircle size={48} />
                             </div>
-                            <h3 className={styles.statusTitle}>Payment Successful 🎉</h3>
+                            <h3 className={styles.statusTitle}>{t("donation.successTitle")}</h3>
                             <p className={styles.statusDesc}>
-                                Thank you for your generous support! Your contribution will make a real difference in the lives of many children.
+                                {t("contact.success")}
                                 <br /><br />
-                                <small style={{ opacity: 0.6 }}>Transaction ID: {transactionId}</small>
+                                <small style={{ opacity: 0.6 }}>{t("donation.transactionId")}: {transactionId}</small>
                             </p>
-                            <button className={styles.actionBtn} onClick={closeModal}>Close Window</button>
+                            <button className={styles.actionBtn} onClick={closeModal}>{t("donation.close")}</button>
                         </div>
                     )}
 
@@ -233,10 +234,10 @@ export default function DonationModal() {
                             <div className={`${styles.statusIcon} ${styles.errorIcon}`}>
                                 <AlertCircle size={48} />
                             </div>
-                            <h3 className={styles.statusTitle}>Payment Failed</h3>
-                            <p className={styles.statusDesc}>We couldn't process your payment. This might be due to incorrect details or network issues. Please try again.</p>
-                            <button className={styles.actionBtn} onClick={() => setStep("method")}>Try Again</button>
-                            <button className={styles.secondaryBtn} onClick={closeModal}>Close</button>
+                            <h3 className={styles.statusTitle}>{t("donation.errorTitle")}</h3>
+                            <p className={styles.statusDesc}>{t("contact.error")}</p>
+                            <button className={styles.actionBtn} onClick={() => setStep("method")}>{t("donation.tryAgain")}</button>
+                            <button className={styles.secondaryBtn} onClick={closeModal}>{t("donation.close")}</button>
                         </div>
                     )}
 
@@ -244,7 +245,7 @@ export default function DonationModal() {
                         <div className={styles.trustArea}>
                             <div className={styles.trustText}>
                                 <Lock size={12} style={{ marginRight: '4px' }} />
-                                <span>Secure payment powered by <strong>Flutterwave</strong></span>
+                                <span>{t("donation.securePayment")} <strong>Flutterwave</strong></span>
                             </div>
                             <div className={styles.badgeRow}>
                                 <VisaIcon />

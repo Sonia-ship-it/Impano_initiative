@@ -2,10 +2,12 @@
 import React from "react";
 import Image from "next/image";
 import { useReveal } from "./useReveal";
+import { useLanguage } from "@/context/LanguageContext";
 import styles from "./About.module.css";
 
 export default function About() {
     const ref = useReveal();
+    const { t } = useLanguage();
 
     return (
         <section className={styles.about} id="about" ref={ref}>
@@ -28,7 +30,7 @@ export default function About() {
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
                             </svg>
-                            <span>Feeding Futures</span>
+                            <span>{t("about.badge")}</span>
                         </div>
                     </div>
                 </div>
@@ -36,22 +38,17 @@ export default function About() {
                 <div className={`${styles.textCol} reveal-right`}>
                     <div className={styles.sectionLabel}>
                         <div className={styles.labelLine} />
-                        <span>ABOUT US</span>
+                        <span>{t("about.label")}</span>
                     </div>
                     <h2 className={styles.heading}>
-                        We Are Young{" "}
-                        <span className="gradient-text">Changemakers</span>
+                        {t("about.heading")}
+                        <span className="gradient-text">{t("about.headingSpan")}</span>
                     </h2>
                     <p className={styles.description}>
-                        Impano Initiative Funds is a movement of passionate young leaders
-                        dedicated to helping children from underprivileged backgrounds
-                        receive food at school, study in safety, and build a brighter
-                        future.
+                        {t("about.desc1")}
                     </p>
                     <p className={styles.description}>
-                        We believe that no student should attend school hungry, and every
-                        child deserves the nutrition needed to learn, succeed, and become
-                        a leader in their community.
+                        {t("about.desc2")}
                     </p>
 
                     <div className={styles.features}>
@@ -64,8 +61,8 @@ export default function About() {
                                 </svg>
                             </div>
                             <div>
-                                <h4 className={styles.featureTitle}>School Meal Programs</h4>
-                                <p className={styles.featureDesc}>Nutritious daily meals for students in need</p>
+                                <h4 className={styles.featureTitle}>{t("about.f1Title")}</h4>
+                                <p className={styles.featureDesc}>{t("about.f1Desc")}</p>
                             </div>
                         </div>
                         <div className={styles.feature}>
@@ -76,8 +73,8 @@ export default function About() {
                                 </svg>
                             </div>
                             <div>
-                                <h4 className={styles.featureTitle}>Safe Education</h4>
-                                <p className={styles.featureDesc}>Creating secure learning environments</p>
+                                <h4 className={styles.featureTitle}>{t("about.f2Title")}</h4>
+                                <p className={styles.featureDesc}>{t("about.f2Desc")}</p>
                             </div>
                         </div>
                         <div className={styles.feature}>
@@ -90,8 +87,8 @@ export default function About() {
                                 </svg>
                             </div>
                             <div>
-                                <h4 className={styles.featureTitle}>Brighter Futures</h4>
-                                <p className={styles.featureDesc}>Empowering the next generation of leaders</p>
+                                <h4 className={styles.featureTitle}>{t("about.f3Title")}</h4>
+                                <p className={styles.featureDesc}>{t("about.f3Desc")}</p>
                             </div>
                         </div>
                     </div>

@@ -1,10 +1,12 @@
 "use client";
 import React from "react";
 import { useReveal } from "./useReveal";
+import { useLanguage } from "@/context/LanguageContext";
 import styles from "./VisionMission.module.css";
 
 export default function VisionMission() {
     const ref = useReveal();
+    const { t } = useLanguage();
 
     return (
         <section className={styles.section} id="vision" ref={ref}>
@@ -18,15 +20,14 @@ export default function VisionMission() {
                 <div className={`${styles.header} reveal`}>
                     <div className={styles.sectionLabel}>
                         <div className={styles.labelLine} />
-                        <span>OUR PURPOSE</span>
+                        <span>{t("vision.vLabel")}</span>
                         <div className={styles.labelLine} />
                     </div>
                     <h2 className={styles.heading}>
-                        Driven by <span className="gradient-text">Purpose</span>
+                        {t("vision.vLabel").split(' & ')[0]} <span className="gradient-text">{t("vision.vLabel").split(' & ')[1]}</span>
                     </h2>
                     <p className={styles.headerSub}>
-                        Our vision and mission guide every step we take toward a world
-                        where every child can thrive.
+                        {t("vision.vDesc").slice(0, 80)}...
                     </p>
                 </div>
 
@@ -39,16 +40,12 @@ export default function VisionMission() {
                                 <path d="M22 12c-2.667 4.667-6 7-10 7s-7.333-2.333-10-7c2.667-4.667 6-7 10-7s7.333 2.333 10 7" />
                             </svg>
                         </div>
-                        <div className={styles.cardLabel}>VISION</div>
+                        <div className={styles.cardLabel}>{t("vision.vTitle").toUpperCase()}</div>
                         <h3 className={styles.cardTitle}>
-                            A Future Without
-                            <br />
-                            <span className={styles.brandText}>Hungry Students</span>
+                            {t("vision.vTitle")}
                         </h3>
                         <p className={styles.cardText}>
-                            To create a future where no student goes hungry in school, and
-                            every child has the nourishment needed to reach their full
-                            potential.
+                            {t("vision.vDesc")}
                         </p>
                         <div className={styles.cardAccent} />
                     </div>
@@ -62,16 +59,12 @@ export default function VisionMission() {
                                 <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
                             </svg>
                         </div>
-                        <div className={`${styles.cardLabel} ${styles.greenLabel}`}>MISSION</div>
+                        <div className={`${styles.cardLabel} ${styles.greenLabel}`}>{t("vision.mTitle").toUpperCase()}</div>
                         <h3 className={styles.cardTitle}>
-                            Empowering Through
-                            <br />
-                            <span className={styles.greenTextHighlight}>Nourishment</span>
+                            {t("vision.mTitle")}
                         </h3>
                         <p className={styles.cardText}>
-                            We are young changemakers dedicated to helping children from
-                            underprivileged backgrounds receive food at school, study in
-                            safety, and build a brighter future.
+                            {t("vision.mDesc")}
                         </p>
                         <div className={`${styles.cardAccent} ${styles.greenAccent}`} />
                     </div>

@@ -1,52 +1,8 @@
 "use client";
 import React, { useRef } from "react";
 import { useReveal } from "./useReveal";
+import { useLanguage } from "@/context/LanguageContext";
 import styles from "./Team.module.css";
-
-const team = [
-    {
-        name: "ISHIMWE CHRISPIN",
-        role: "Founder",
-        initials: "IC",
-        color: "#f09620",
-        bio: "Visionary leader dedicated to creating sustainable community impact through innovative social programs.",
-    },
-    {
-        name: "ROGER DUSHIME",
-        role: "CO-Founder & Managing Director",
-        initials: "RD",
-        color: "#3a9948",
-        bio: "Strategic expert focused on operational excellence and scaling initiative reach across the region.",
-    },
-    {
-        name: "UMUTONIWASE GIFT",
-        role: "Operation Manager",
-        initials: "UG",
-        color: "#f09620",
-        bio: "Ensuring seamless execution of projects with a focus on efficiency and community engagement.",
-    },
-    {
-        name: "ISHIMWE DIANE",
-        role: "Health Care Adviser",
-        initials: "ID",
-        color: "#3a9948",
-        bio: "Bridging the gap between social initiatives and public health to ensure holistic community wellbeing.",
-    },
-    {
-        name: "UWASE SONIA",
-        role: "Financial & IT Support",
-        initials: "US",
-        color: "#f09620",
-        bio: "Managing the digital backbone and financial integrity of the initiative with precision.",
-    },
-    {
-        name: "RUKUNDO Bertin",
-        role: "Content Manager",
-        initials: "RB",
-        color: "#3a9948",
-        bio: "Sharing our story through compelling digital experiences and creative communication strategies.",
-    },
-];
 
 const SocialIcons = {
     Twitter: () => (
@@ -131,6 +87,52 @@ const TeamCard = ({ member, index }: { member: any; index: number }) => {
 
 export default function Team() {
     const revealRef = useReveal();
+    const { t } = useLanguage();
+
+    const team = [
+        {
+            name: "ISHIMWE CHRISPIN",
+            role: t("team.roles.founder"),
+            initials: "IC",
+            color: "#f09620",
+            bio: t("team.bios.ic"),
+        },
+        {
+            name: "ROGER DUSHIME",
+            role: t("team.roles.cofounder"),
+            initials: "RD",
+            color: "#3a9948",
+            bio: t("team.bios.rd"),
+        },
+        {
+            name: "UMUTONIWASE GIFT",
+            role: t("team.roles.ops"),
+            initials: "UG",
+            color: "#f09620",
+            bio: t("team.bios.ug"),
+        },
+        {
+            name: "ISHIMWE DIANE",
+            role: t("team.roles.health"),
+            initials: "ID",
+            color: "#3a9948",
+            bio: t("team.bios.id"),
+        },
+        {
+            name: "UWASE SONIA",
+            role: t("team.roles.finance"),
+            initials: "US",
+            color: "#f09620",
+            bio: t("team.bios.us"),
+        },
+        {
+            name: "RUKUNDO Bertin",
+            role: t("team.roles.content"),
+            initials: "RB",
+            color: "#3a9948",
+            bio: t("team.bios.rb"),
+        },
+    ];
 
     return (
         <section className={styles.section} id="team" ref={revealRef}>
@@ -144,15 +146,14 @@ export default function Team() {
                 <div className={`${styles.header} reveal`}>
                     <div className={styles.sectionLabel}>
                         <div className={styles.labelDot} />
-                        <span>Executive Board</span>
+                        <span>{t("team.board")}</span>
                     </div>
                     <h2 className={styles.heading}>
-                        Meet the <span className="gradient-text">Architects</span> <br />
-                        of Change
+                        {t("team.heading")} <span className="gradient-text">{t("team.board") === "Executive Board" ? "Architects" : t("team.architects")}</span> <br />
+                        {t("team.ofChange")}
                     </h2>
                     <p className={styles.headerSub}>
-                        A multi-disciplinary collective of young visionaries committed to
-                        redefining the future of our community through action.
+                        {t("team.sub")}
                     </p>
                 </div>
 

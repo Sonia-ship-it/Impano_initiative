@@ -1,21 +1,23 @@
 "use client";
 import React from "react";
 import Image from "next/image";
+import { useLanguage } from "@/context/LanguageContext";
 import styles from "./Footer.module.css";
 
-const navLinks = [
-    { label: "Home", href: "#home" },
-    { label: "About", href: "#about" },
-    { label: "Vision", href: "#vision" },
-    { label: "Team", href: "#team" },
-    { label: "Contact", href: "#contact" },
-];
-
 export default function Footer() {
+    const { t } = useLanguage();
     const handleClick = (href: string) => {
         const el = document.querySelector(href);
         if (el) el.scrollIntoView({ behavior: "smooth" });
     };
+
+    const navLinks = [
+        { label: t("nav.home"), href: "#home" },
+        { label: t("nav.about"), href: "#about" },
+        { label: t("nav.vision"), href: "#vision" },
+        { label: t("nav.team"), href: "#team" },
+        { label: t("nav.contact"), href: "#contact" },
+    ];
 
     return (
         <footer className={styles.footer}>
@@ -33,17 +35,16 @@ export default function Footer() {
                             />
                             <div>
                                 <div className={styles.logoTitle}>IMPANO</div>
-                                <div className={styles.logoSub}>INITIATIVE FUNDS</div>
+                                <div className={styles.logoSub}>{t("footer.tagline").split('IMPANO ')[1] || "INITIATIVE FUNDS"}</div>
                             </div>
                         </div>
                         <p className={styles.brandDesc}>
-                            Young changemakers dedicated to ensuring every child has a
-                            nourished future and the chance to thrive.
+                            {t("about.desc1").slice(0, 120)}...
                         </p>
                     </div>
 
                     <div className={styles.linksCol}>
-                        <h4 className={styles.colTitle}>Quick Links</h4>
+                        <h4 className={styles.colTitle}>{t("programs.label")}</h4>
                         {navLinks.map((link) => (
                             <a
                                 key={link.href}
@@ -60,7 +61,7 @@ export default function Footer() {
                     </div>
 
                     <div className={styles.contactCol}>
-                        <h4 className={styles.colTitle}>Contact</h4>
+                        <h4 className={styles.colTitle}>{t("nav.contact")}</h4>
                         <a
                             href="mailto:uwasesonia43@gmail.com"
                             className={styles.footerLink}
@@ -73,11 +74,10 @@ export default function Footer() {
 
                 <div className={styles.bottom}>
                     <p className={styles.copyright}>
-                        © {new Date().getFullYear()} Impano Initiative Funds. All rights
-                        reserved.
+                        © {new Date().getFullYear()} {t("footer.tagline")}. {t("footer.rights")}
                     </p>
                     <p className={styles.madeWith}>
-                        Made for the children
+                        {t("footer.subTagline")}
                     </p>
                 </div>
             </div>

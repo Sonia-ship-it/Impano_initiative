@@ -1,10 +1,12 @@
 "use client";
 import React, { useState } from "react";
 import { useReveal } from "./useReveal";
+import { useLanguage } from "@/context/LanguageContext";
 import styles from "./Contact.module.css";
 
 export default function Contact() {
     const ref = useReveal();
+    const { t } = useLanguage();
     const [formData, setFormData] = useState({
         name: "",
         email: "",
@@ -61,15 +63,14 @@ export default function Contact() {
                 <div className={`${styles.header} reveal`}>
                     <div className={styles.sectionLabel}>
                         <div className={styles.labelLine} />
-                        <span>CONTACT US</span>
+                        <span>{t("contact.label")}</span>
                         <div className={styles.labelLine} />
                     </div>
                     <h2 className={styles.heading}>
-                        Get in <span className="gradient-text">Touch</span>
+                        {t("contact.heading")} <span className="gradient-text">{t("contact.headingSpan")}</span>
                     </h2>
                     <p className={styles.headerSub}>
-                        Have questions or want to support our mission? Reach out — we&apos;d
-                        love to hear from you.
+                        {t("contact.sub")}
                     </p>
                 </div>
 
@@ -114,8 +115,8 @@ export default function Contact() {
                                 </svg>
                             </div>
                             <div>
-                                <h4 className={styles.infoLabel}>Our Cause</h4>
-                                <p className={styles.infoValue}>Feeding futures, one meal at a time</p>
+                                <h4 className={styles.infoLabel}>{t("about.badge")}</h4>
+                                <p className={styles.infoValue}>{t("footer.subTagline")}</p>
                             </div>
                         </div>
                     </div>
@@ -127,7 +128,7 @@ export default function Contact() {
                     >
                         <div className={styles.formGroup}>
                             <label htmlFor="contact-name" className={styles.label}>
-                                Full Name
+                                {t("contact.formName")}
                             </label>
                             <input
                                 type="text"
@@ -135,14 +136,14 @@ export default function Contact() {
                                 name="name"
                                 value={formData.name}
                                 onChange={handleChange}
-                                placeholder="Your name"
+                                placeholder={t("contact.formNamePlaceholder")}
                                 required
                                 className={styles.input}
                             />
                         </div>
                         <div className={styles.formGroup}>
                             <label htmlFor="contact-email" className={styles.label}>
-                                Email Address
+                                {t("contact.formEmail")}
                             </label>
                             <input
                                 type="email"
@@ -150,21 +151,22 @@ export default function Contact() {
                                 name="email"
                                 value={formData.email}
                                 onChange={handleChange}
-                                placeholder="you@example.com"
+                                placeholder={t("contact.formEmailPlaceholder")}
                                 required
                                 className={styles.input}
                             />
                         </div>
                         <div className={styles.formGroup}>
                             <label htmlFor="contact-message" className={styles.label}>
-                                Message
+                                {t("contact.formMessage")}
                             </label>
+                            <circle cx="12" cy="12" r="10" />
                             <textarea
                                 id="contact-message"
                                 name="message"
                                 value={formData.message}
                                 onChange={handleChange}
-                                placeholder="How can we help?"
+                                placeholder={t("contact.formMessagePlaceholder")}
                                 rows={5}
                                 required
                                 className={styles.textarea}
@@ -176,7 +178,7 @@ export default function Contact() {
                                     <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
                                     <polyline points="22 4 12 14.01 9 11.01" />
                                 </svg>
-                                <span>Thank you! Your message has been sent successfully.</span>
+                                <span>{t("contact.success")}</span>
                             </div>
                         )}
                         {status === "error" && (
@@ -186,7 +188,7 @@ export default function Contact() {
                                     <line x1="12" y1="8" x2="12" y2="12" />
                                     <line x1="12" y1="16" x2="12.01" y2="16" />
                                 </svg>
-                                <span>Something went wrong. Please try again or email us directly.</span>
+                                <span>{t("contact.error")}</span>
                             </div>
                         )}
                         <button
@@ -195,7 +197,7 @@ export default function Contact() {
                             id="contact-submit"
                             disabled={status === "loading"}
                         >
-                            <span>{status === "loading" ? "Sending..." : "Send Message"}</span>
+                            <span>{status === "loading" ? t("contact.sending") : t("contact.formSubmit")}</span>
                             {status === "loading" ? (
                                 <div className={styles.spinner} />
                             ) : (

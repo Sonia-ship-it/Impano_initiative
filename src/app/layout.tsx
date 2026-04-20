@@ -34,6 +34,7 @@ import ScrollProgress from "@/components/ScrollProgress";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import CustomCursor from "@/components/CustomCursor";
 import { DonationProvider } from "@/context/DonationContext";
+import { LanguageProvider } from "@/context/LanguageContext";
 import DonationModal from "@/components/DonationModal";
 
 export default function RootLayout({
@@ -45,13 +46,15 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body>
         <ThemeProvider attribute="data-theme" defaultTheme="dark" enableSystem>
-          <DonationProvider>
-            <CustomCursor />
-            <ScrollProgress />
-            <NoiseOverlay />
-            {children}
-            <DonationModal />
-          </DonationProvider>
+          <LanguageProvider>
+            <DonationProvider>
+              <CustomCursor />
+              <ScrollProgress />
+              <NoiseOverlay />
+              {children}
+              <DonationModal />
+            </DonationProvider>
+          </LanguageProvider>
         </ThemeProvider>
       </body>
     </html>
