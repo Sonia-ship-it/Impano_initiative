@@ -11,16 +11,48 @@ export default function Contact() {
         message: "",
     });
 
+    const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const mailto = `mailto:impanoinitiativefund@gmail.com?subject=Message from ${formData.name}&body=${encodeURIComponent(formData.message)}%0A%0AFrom: ${formData.email}`;
-        window.location.href = mailto;
+        setStatus("loading");
+
+        try {
+            const response = await fetch("https://api.web3forms.com/submit", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json",
+                },
+                body: JSON.stringify({
+                    access_key: "92f0d53d-d05b-4aad-8597-fca33422b381",
+                    name: formData.name,
+                    email: formData.email,
+                    message: formData.message,
+                    subject: `New Message from ${formData.name} - Impano Initiative`,
+                }),
+            });
+
+            const result = await response.json();
+            if (result.success) {
+                setStatus("success");
+                setFormData({ name: "", email: "", message: "" });
+            } else {
+                setStatus("error");
+            }
+        } catch (error) {
+            console.error("Form submission error:", error);
+            setStatus("error");
+        }
+
+        // Reset status after a few seconds
+        setTimeout(() => setStatus("idle"), 7000);
     };
 
     return (
@@ -54,10 +86,10 @@ export default function Contact() {
                             <div>
                                 <h4 className={styles.infoLabel}>Email</h4>
                                 <a
-                                    href="mailto:impanoinitiativefund@gmail.com"
+                                    href="mailto:uwasesonia43@gmail.com"
                                     className={styles.infoValue}
                                 >
-                                    impanoinitiativefund@gmail.com
+                                    uwasesonia43@gmail.com
                                 </a>
                             </div>
                         </div>
@@ -138,12 +170,40 @@ export default function Contact() {
                                 className={styles.textarea}
                             />
                         </div>
-                        <button type="submit" className={styles.submitBtn} id="contact-submit">
-                            <span>Send Message</span>
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                                <line x1="22" y1="2" x2="11" y2="13" />
-                                <polygon points="22 2 15 22 11 13 2 9 22 2" />
-                            </svg>
+                        {status === "success" && (
+                            <div className={styles.successMessage}>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                                    <polyline points="22 4 12 14.01 9 11.01" />
+                                </svg>
+                                <span>Thank you! Your message has been sent successfully.</span>
+                            </div>
+                        )}
+                        {status === "error" && (
+                            <div className={styles.errorMessage}>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <line x1="12" y1="8" x2="12" y2="12" />
+                                    <line x1="12" y1="16" x2="12.01" y2="16" />
+                                </svg>
+                                <span>Something went wrong. Please try again or email us directly.</span>
+                            </div>
+                        )}
+                        <button
+                            type="submit"
+                            className={styles.submitBtn}
+                            id="contact-submit"
+                            disabled={status === "loading"}
+                        >
+                            <span>{status === "loading" ? "Sending..." : "Send Message"}</span>
+                            {status === "loading" ? (
+                                <div className={styles.spinner} />
+                            ) : (
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                    <line x1="22" y1="2" x2="11" y2="13" />
+                                    <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                                </svg>
+                            )}
                         </button>
                     </form>
                 </div>

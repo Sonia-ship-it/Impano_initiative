@@ -1,0 +1,35 @@
+.toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid rgba(var(--white-rgb), 0.1);
+    background: transparent;
+    color: var(--gray-400);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.toggle:hover {
+    color: var(--brand);
+    border-color: var(--brand);
+    box-shadow: 0 0 15px rgba(240, 150, 32, 0.2);
+    transform: scale(1.05);
+}
+
+.icon {
+    width: 20px;
+    height: 20px;
+}
+
+.placeholder {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid rgba(var(--white-rgb), 0.05);
+    background: transparent;
+}

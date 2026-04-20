@@ -23,6 +23,10 @@ export const metadata: Metadata = {
       "Nourishing futures — ensuring no child goes to school hungry.",
     type: "website",
   },
+  icons: {
+    icon: "/favicon-custom.png",
+    apple: "/favicon-custom.png",
+  },
 };
 
 import NoiseOverlay from "@/components/NoiseOverlay";
@@ -37,9 +41,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <link rel="icon" href="/images/logo.png" />
-      </head>
       <body>
         <ThemeProvider attribute="data-theme" defaultTheme="dark" enableSystem>
           <CustomCursor />

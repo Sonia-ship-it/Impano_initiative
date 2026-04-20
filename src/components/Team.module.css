@@ -1,176 +1,280 @@
 .section {
-    padding: 120px 24px;
+    padding: 160px 24px;
     position: relative;
+    overflow: hidden;
+    background: var(--dark);
+}
+
+/* Background Decorative Elements */
+.bgDecoration {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.5;
+}
+
+.glow {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(var(--brand-rgb), 0.05) 0%, transparent 70%);
+    border-radius: 50%;
+    filter: blur(80px);
+    top: -100px;
+    right: -200px;
+}
+
+.glow2 {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(58, 153, 72, 0.05) 0%, transparent 70%);
+    border-radius: 50%;
+    filter: blur(80px);
+    bottom: -100px;
+    left: -200px;
 }
 
 .container {
-    max-width: 1200px;
+    max-width: 1300px;
     margin: 0 auto;
+    position: relative;
+    z-index: 1;
 }
 
 .header {
     text-align: center;
-    margin-bottom: 64px;
+    margin-bottom: 80px;
 }
 
 .sectionLabel {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    justify-content: center;
     gap: 12px;
-    margin-bottom: 16px;
+    margin-bottom: 24px;
+    padding: 8px 16px;
+    background: rgba(var(--white-rgb), 0.03);
+    border: 1px solid rgba(var(--white-rgb), 0.08);
+    border-radius: 100px;
+    backdrop-filter: blur(4px);
 }
 
-.labelLine {
-    width: 32px;
-    height: 2px;
+.labelDot {
+    width: 6px;
+    height: 6px;
     background: var(--brand);
-    border-radius: 2px;
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--brand);
 }
 
 .sectionLabel span {
     font-family: 'Outfit', sans-serif;
     font-weight: 600;
-    font-size: 12px;
-    letter-spacing: 3px;
+    font-size: 11px;
+    letter-spacing: 2px;
     color: var(--brand);
+    text-transform: uppercase;
 }
 
 .heading {
     font-family: 'Outfit', sans-serif;
     font-weight: 800;
-    font-size: clamp(32px, 4vw, 48px);
+    font-size: clamp(40px, 5vw, 64px);
     color: var(--white);
-    letter-spacing: -0.5px;
-    margin-bottom: 16px;
+    letter-spacing: -1.5px;
+    line-height: 1.1;
+    margin-bottom: 24px;
 }
 
 .headerSub {
     font-family: 'Outfit', sans-serif;
     font-weight: 300;
-    font-size: 17px;
-    color: var(--gray-500);
-    max-width: 480px;
+    font-size: clamp(16px, 1.2vw, 19px);
+    color: var(--gray-400);
+    max-width: 600px;
     margin: 0 auto;
-    line-height: 1.6;
+    line-height: 1.7;
 }
 
 .grid {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 20px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
 }
 
 .card {
     position: relative;
-    border-radius: 24px;
-    overflow: hidden;
+    height: 100%;
 }
 
 .cardInner {
-    background: rgba(var(--white-rgb), 0.02);
-    border: 1px solid rgba(var(--white-rgb), 0.06);
-    border-radius: 24px;
-    padding: 40px 20px 36px;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 32px;
+    padding: 48px 32px;
     text-align: center;
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     position: relative;
     overflow: hidden;
 }
 
+.cardInner::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(800px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(var(--white-rgb), 0.06), transparent 40%);
+    opacity: 0;
+    transition: opacity 0.5s;
+    pointer-events: none;
+}
+
+.cardInner:hover::before {
+    opacity: 1;
+}
+
 .cardInner:hover {
-    transform: translateY(-8px);
-    border-color: rgba(240, 150, 32, 0.12);
-    background: rgba(var(--white-rgb), 0.03);
+    transform: translateY(-12px);
+    border-color: rgba(var(--white-rgb), 0.15);
+    background: rgba(var(--white-rgb), 0.04);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.avatarWrapper {
+    position: relative;
+    margin-bottom: 32px;
 }
 
 .avatar {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    border-radius: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto 20px;
-    border: 2px solid;
     position: relative;
-    transition: all 0.3s ease;
+    z-index: 2;
+    background: rgba(var(--white-rgb), 0.03);
+    border: 1px solid rgba(var(--white-rgb), 0.1);
+    transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    transform: rotate(-5deg);
 }
 
 .cardInner:hover .avatar {
-    transform: scale(1.08);
+    transform: rotate(0deg) scale(1.1);
+    border-color: var(--brand);
 }
 
 .initials {
     font-family: 'Outfit', sans-serif;
     font-weight: 800;
-    font-size: 24px;
+    font-size: 32px;
     letter-spacing: 1px;
 }
 
-.avatarRing {
+.avatarDecoration {
     position: absolute;
-    inset: -6px;
-    border-radius: 50%;
-    border: 1px solid;
-    opacity: 0;
-    transition: all 0.4s ease;
+    inset: -10px;
+    border-radius: 35px;
+    border: 1px dashed rgba(var(--white-rgb), 0.15);
+    opacity: 0.3;
+    transition: all 0.8s ease;
+    animation: rotate 20s linear infinite;
 }
 
-.cardInner:hover .avatarRing {
-    opacity: 1;
-    inset: -8px;
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.cardInner:hover .avatarDecoration {
+    opacity: 0.8;
+    inset: -15px;
+    border-color: rgba(var(--brand-rgb), 0.3);
 }
 
 .name {
     font-family: 'Outfit', sans-serif;
     font-weight: 700;
-    font-size: 14px;
+    font-size: 20px;
     color: var(--white);
-    letter-spacing: 0.5px;
-    margin-bottom: 6px;
-    text-transform: uppercase;
+    letter-spacing: -0.2px;
+    margin-bottom: 8px;
+    transition: color 0.3s ease;
 }
 
 .role {
     font-family: 'Outfit', sans-serif;
     font-weight: 400;
-    font-size: 12px;
-    color: var(--gray-500);
-    line-height: 1.5;
+    font-size: 14px;
+    color: var(--brand);
+    margin-bottom: 24px;
+    opacity: 0.8;
 }
 
-.hoverBar {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    opacity: 0;
-    transition: all 0.3s ease;
+.bio {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 300;
+    font-size: 14px;
+    color: var(--gray-400);
+    line-height: 1.6;
+    margin-top: auto;
 }
 
-.cardInner:hover .hoverBar {
+.socials {
+    display: flex;
+    gap: 16px;
+    margin-top: 32px;
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
+}
+
+.cardInner:hover .socials {
     opacity: 1;
+}
+
+.socialIcon {
+    color: var(--white);
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.socialIcon:hover {
+    transform: translateY(-2px);
+    color: var(--brand);
 }
 
 @media (max-width: 1024px) {
     .grid {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
     }
 }
 
 @media (max-width: 640px) {
     .grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 16px;
+        grid-template-columns: 1fr;
+        gap: 20px;
     }
 
     .section {
-        padding: 80px 20px;
+        padding: 100px 20px;
     }
 
-    .cardInner {
-        padding: 32px 16px 28px;
+    .heading {
+        font-size: 36px;
     }
 }

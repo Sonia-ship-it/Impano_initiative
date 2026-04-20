@@ -33,6 +33,7 @@
     align-items: center;
     justify-content: space-between;
     transition: all 0.5s ease;
+    flex-wrap: nowrap;
 }
 
 .scrolled .inner {
@@ -189,21 +190,29 @@
     box-shadow: 0 8px 30px rgba(240, 150, 32, 0.35);
 }
 
+.controls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: relative;
+    z-index: 1001;
+}
+
 /* Hamburger */
 .hamburger {
     display: none;
     flex-direction: column;
     justify-content: center;
     gap: 6px;
-    width: 44px;
-    height: 44px;
+    width: 40px;
+    height: 40px;
     background: rgba(var(--white-rgb), 0.05);
     border: 1px solid rgba(var(--white-rgb), 0.1);
     border-radius: 50%;
     cursor: pointer;
     padding: 0 10px;
     z-index: 1001;
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .hamburger:hover {
@@ -233,46 +242,60 @@
     transform: translateY(-8px) rotate(-45deg);
 }
 
-/* Mobile Menu */
+/* Mobile Menu - Solid Black Drawer */
 .mobileMenu {
     display: none;
     position: fixed;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(var(--dark-rgb), 0.98);
-    backdrop-filter: blur(40px);
+    width: 100%;
+    height: 100vh;
+    background: #000000;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
+    padding: 100px 24px 40px;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     z-index: 999;
 }
 
 .mobileOpen {
     opacity: 1;
     pointer-events: all;
-    animation: fadeIn 0.5s ease-out forwards;
+}
+
+.menuContent {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
 }
 
 .mobileLink {
+    display: flex;
+    align-items: center;
+    gap: 16px;
     font-family: 'Outfit', sans-serif;
     font-weight: 600;
-    font-size: 28px;
-    color: var(--gray-400);
+    font-size: 24px;
+    color: var(--white);
     text-decoration: none;
-    padding: 8px 40px;
     transition: all 0.3s ease;
-    transform: translateY(20px);
+    transform: translateX(-20px);
     opacity: 0;
 }
 
 .mobileOpen .mobileLink {
-    animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation: slideInLeft 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideInLeft {
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
 .mobileOpen .mobileLink:nth-child(1) {
@@ -299,29 +322,40 @@
     animation-delay: 0.35s;
 }
 
-.mobileLink:hover,
+.linkNum {
+    font-size: 12px;
+    color: var(--brand);
+    font-family: 'Outfit', sans-serif;
+    width: 20px;
+}
+
+.mobileLink:hover {
+    color: var(--brand);
+    padding-left: 8px;
+}
+
 .activeMobile {
     color: var(--brand);
-    scale: 1.1;
 }
 
 .mobileDonate {
     font-family: 'Outfit', sans-serif;
     font-weight: 700;
-    font-size: 18px;
+    font-size: 16px;
     color: var(--dark);
-    background: linear-gradient(135deg, var(--brand), var(--brand-light));
+    background: var(--brand);
     text-decoration: none;
-    padding: 16px 48px;
+    padding: 18px 48px;
     border-radius: 100px;
-    margin-top: 32px;
-    box-shadow: 0 4px 30px rgba(240, 150, 32, 0.3);
+    text-align: center;
+    margin-top: 16px;
+    box-shadow: 0 10px 30px rgba(var(--brand-rgb), 0.2);
     opacity: 0;
     transform: translateY(20px);
 }
 
 .mobileOpen .mobileDonate {
-    animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.4s;
+    animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.45s;
 }
 
 @keyframes fadeInUp {
@@ -331,10 +365,22 @@
     }
 }
 
-@keyframes fadeIn {
-    to {
-        opacity: 1;
-    }
+.menuFooter {
+    margin-top: auto;
+    padding-top: 40px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    width: 100%;
+    max-width: 400px;
+    margin: auto auto 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.footerLabel {
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: var(--gray-500);
 }
 
 @media (max-width: 1024px) {
@@ -353,22 +399,38 @@
     .scrolled {
         width: calc(100% - 32px);
     }
+
+    .inner {
+        padding: 0 24px;
+    }
 }
 
 @media (max-width: 640px) {
     .scrolled {
-        padding: 8px 16px;
+        padding: 8px 12px;
+        width: calc(100% - 20px);
+    }
+
+    .inner {
+        padding: 0 12px;
+        gap: 8px;
     }
 
     .logoTitle {
-        font-size: 15px;
+        font-size: 14px;
+        letter-spacing: 1px;
     }
 
     .scrolled .logoTitle {
-        font-size: 14px;
+        font-size: 13px;
     }
 
     .logoSub {
-        font-size: 8px;
+        font-size: 7px;
+        letter-spacing: 1px;
+    }
+
+    .controls {
+        gap: 8px;
     }
 }

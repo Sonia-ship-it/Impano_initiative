@@ -3,6 +3,7 @@
 
 :root {
   --brand: #f09620;
+  --brand-rgb: 240, 150, 32;
   --brand-light: #f5b34d;
   --brand-dark: #d47f10;
   --green: #2d7a3a;
@@ -62,6 +63,7 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 80px;
   font-family: 'Outfit', sans-serif;
 }
 

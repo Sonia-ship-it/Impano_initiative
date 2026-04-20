@@ -62,10 +62,10 @@ export default function Footer() {
                     <div className={styles.contactCol}>
                         <h4 className={styles.colTitle}>Contact</h4>
                         <a
-                            href="mailto:impanoinitiativefund@gmail.com"
+                            href="mailto:uwasesonia43@gmail.com"
                             className={styles.footerLink}
                         >
-                            impanoinitiativefund@gmail.com
+                            uwasesonia43@gmail.com
                         </a>
                         <span className={styles.footerLink}>Rwanda</span>
                     </div>

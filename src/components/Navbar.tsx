@@ -96,7 +96,7 @@ export default function Navbar() {
                     </a>
                 </div>
 
-                <div className="flex items-center gap-4">
+                <div className={styles.controls}>
                     <ThemeToggle />
 
                     <button
@@ -116,32 +116,43 @@ export default function Navbar() {
             <div
                 className={`${styles.mobileMenu} ${mobileOpen ? styles.mobileOpen : ""}`}
             >
-                {navLinks.map((link) => (
+                <div className={styles.menuContent}>
+                    {navLinks.map((link, index) => (
+                        <a
+                            key={link.href}
+                            href={link.href}
+                            className={`${styles.mobileLink} ${activeSection === link.href.replace("#", "")
+                                ? styles.activeMobile
+                                : ""
+                                }`}
+                            onClick={(e) => {
+                                e.preventDefault();
+                                handleClick(link.href);
+                            }}
+                        >
+                            <span className={styles.linkNum}>0{index + 1}</span>
+                            {link.label}
+                        </a>
+                    ))}
                     <a
-                        key={link.href}
-                        href={link.href}
-                        className={`${styles.mobileLink} ${activeSection === link.href.replace("#", "")
-                            ? styles.activeMobile
-                            : ""
-                            }`}
+                        href="#donate"
+                        className={styles.mobileDonate}
                         onClick={(e) => {
                             e.preventDefault();
-                            handleClick(link.href);
+                            handleClick("#contact");
                         }}
                     >
-                        {link.label}
+                        Donate Now
                     </a>
-                ))}
-                <a
-                    href="#donate"
-                    className={styles.mobileDonate}
-                    onClick={(e) => {
-                        e.preventDefault();
-                        handleClick("#contact");
-                    }}
-                >
-                    Donate Now
-                </a>
+                </div>
+
+                <div className={styles.menuFooter}>
+                    <div className={styles.footerLabel}>Impano Initiative</div>
+                    <div className={styles.logoText} style={{ alignItems: 'center' }}>
+                        <span className={styles.logoTitle} style={{ fontSize: '14px' }}>IMPANO</span>
+                        <span className={styles.logoSub} style={{ fontSize: '8px' }}>INITIATIVE FUNDS</span>
+                    </div>
+                </div>
             </div>
         </nav>
     );
