@@ -279,7 +279,7 @@ export default function Team() {
             bio: t("team.bios.ug"),
             image: "/images/gift.jpeg",
             email: "umutoniwasegift@gmail.com",
-            phone: "0781272782"
+            phone: "+250781272782"
         },
         {
             name: "ISHIMWE DIANE",
@@ -289,7 +289,7 @@ export default function Team() {
             bio: t("team.bios.id"),
             image: "/images/diane.jpeg",
             email: "ishimwedianah80@gmail.com",
-            phone: "0788640764"
+            phone: "+250788640764"
         },
         {
             name: "UWASE SONIA",
@@ -299,7 +299,7 @@ export default function Team() {
             bio: t("team.bios.us"),
             image: "/images/sonia.png",
             email: "uwasesonia43@gmail.com",
-            phone: "0795300840"
+            phone: "+250795300840"
         },
         {
             name: "RUKUNDO Bertin",
@@ -309,7 +309,7 @@ export default function Team() {
             bio: t("team.bios.rb"),
             image: "/images/bertin.jpeg",
             email: "bertinrukundo@gmail.com",
-            phone: "0783737664"
+            phone: "+250783737664"
         },
     ];
 
