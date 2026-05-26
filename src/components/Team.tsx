@@ -121,6 +121,8 @@ interface TeamMember {
     color: string;
     bio: string;
     image?: string;
+    email?: string;
+    phone?: string;
 }
 
 const TeamCard = ({ member, index, language }: { member: TeamMember; index: number; language: string }) => {
@@ -211,6 +213,32 @@ const TeamCard = ({ member, index, language }: { member: TeamMember; index: numb
                         <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
                     </svg>
                     <p className={styles.bio}>{member.bio}</p>
+
+                    {(member.email || member.phone) && (
+                        <div className={styles.contactInfo}>
+                            {member.email && (
+                                <a href={`mailto:${member.email}`} className={styles.contactItem} style={{ '--accent': member.color } as React.CSSProperties}>
+                                    <span className={styles.contactIcon}>
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                                            <polyline points="22,6 12,13 2,6" />
+                                        </svg>
+                                    </span>
+                                    {member.email}
+                                </a>
+                            )}
+                            {member.phone && (
+                                <a href={`tel:${member.phone.replace(/\s+/g, '')}`} className={styles.contactItem} style={{ '--accent': member.color } as React.CSSProperties}>
+                                    <span className={styles.contactIcon}>
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                                        </svg>
+                                    </span>
+                                    {member.phone}
+                                </a>
+                            )}
+                        </div>
+                    )}
                 </div>
 
                 <div className={styles.cardFooter}>
@@ -242,6 +270,9 @@ export default function Team() {
             initials: "IC",
             color: "#f09620",
             bio: t("team.bios.ic"),
+            image: "/images/chrispin.jpeg",
+            email: "ishchrispin27@gmail.com",
+            phone: "+250780124489"
         },
         {
             name: "ROGER DUSHIME",
@@ -250,6 +281,8 @@ export default function Team() {
             color: "#3a9948",
             bio: t("team.bios.rd"),
             image: "/images/roger.jpeg",
+            email: "dushimeroger77@gmail.com",
+            phone: "+250788455790"
         },
         {
             name: "UMUTONIWASE GIFT",
@@ -258,6 +291,8 @@ export default function Team() {
             color: "#f09620",
             bio: t("team.bios.ug"),
             image: "/images/gift.jpeg",
+            email: "umutoniwasegift@gmail.com",
+            phone: "0781272782"
         },
         {
             name: "ISHIMWE DIANE",
@@ -274,6 +309,8 @@ export default function Team() {
             color: "#f09620",
             bio: t("team.bios.us"),
             image: "/images/sonia.png",
+            email: "uwasesonia43@gmail.com",
+            phone: "0795300840"
         },
         {
             name: "RUKUNDO Bertin",
@@ -282,6 +319,8 @@ export default function Team() {
             color: "#3a9948",
             bio: t("team.bios.rb"),
             image: "/images/bertin.jpeg",
+            email: "bertinrukundo@gmail.com",
+            phone: "0783737664"
         },
     ];
 

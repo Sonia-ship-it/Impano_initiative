@@ -3,7 +3,7 @@ export const translations: any = {
         nav: {
             home: "Home",
             about: "About",
-            programs: "Programs",
+            gallery: "Gallery",
             vision: "Vision",
             team: "Team",
             contact: "Contact",
@@ -37,17 +37,17 @@ export const translations: any = {
             f3Title: "Brighter Futures",
             f3Desc: "Empowering the next generation of leaders"
         },
-        programs: {
-            label: "OUR PROGRAMS",
-            heading: "Initiatives Making a ",
-            headingSpan: "Difference",
+        gallery: {
+            label: "OUR GALLERY",
+            heading: "Visuals of our ",
+            headingSpan: "Impact",
             p1Title: "School Nutrition Program",
             p1Desc: "Providing balanced, highly nutritious meals to ensure no child studies on an empty stomach.",
             p2Title: "Emergency Food Support",
             p2Desc: "Rapid response food assistance for families facing extreme hardship and sudden crises.",
             p3Title: "Safe Learning Spaces",
             p3Desc: "Upgrading school facilities to ensure children can study in a safe, healthy environment.",
-            cta: "Support a Student"
+            cta: "View More"
         },
         vision: {
             vTitle: "Our Vision",
@@ -152,7 +152,7 @@ export const translations: any = {
         nav: {
             home: "Ahabanza",
             about: "Tuvuga",
-            programs: "Gahunda",
+            gallery: "Amafoto",
             vision: "Icyerekezo",
             team: "Ikipe",
             contact: "Twandikire",
@@ -186,17 +186,17 @@ export const translations: any = {
             f3Title: "Ejo hazaza heza",
             f3Desc: "Guha ubushobozi abazaba abayozi b'ejo hazaza"
         },
-        programs: {
-            label: "GAHUNDA ZACU",
-            heading: "Ibikorwa bizana ",
-            headingSpan: "impinduka",
+        gallery: {
+            label: "AMAFOTO YACU",
+            heading: "Amashusho y' ",
+            headingSpan: "Ibikorwa byacu",
             p1Title: "Gahunda y'Imirire mu Mashuri",
             p1Desc: "Gutanga indyo yuzuye kugira ngo nta mwana wiga ashonje.",
             p2Title: "Ubufatanye mu Biribwa",
             p2Desc: "Gutabara vuba mu bijyanye n'ibiribwa ku miryango ifite ibibazo bitoroshye.",
             p3Title: "Ahantu Heza ho Kwigira",
             p3Desc: "Kuzamura imiterere y'amashuri kugira ngo abana bige mu mudendezo.",
-            cta: "Fasha Umunyeshuri"
+            cta: "Reba Andi"
         },
         vision: {
             vTitle: "Icyerekezo Cyacu",
@@ -301,7 +301,7 @@ export const translations: any = {
         nav: {
             home: "Accueil",
             about: "À propos",
-            programs: "Programmes",
+            gallery: "Galerie",
             vision: "Vision",
             team: "Équipe",
             contact: "Contact",
@@ -335,17 +335,17 @@ export const translations: any = {
             f3Title: "Avenirs radieux",
             f3Desc: "Autonomiser la prochaine génération de leaders"
         },
-        programs: {
-            label: "NOS PROGRAMMES",
-            heading: "Des initiatives qui font la ",
-            headingSpan: "différence",
+        gallery: {
+            label: "NOTRE GALERIE",
+            heading: "Visuels de notre ",
+            headingSpan: "Impact",
             p1Title: "Programme de nutrition scolaire",
             p1Desc: "Fournir des repas équilibrés pour s'assurer qu'aucun enfant n'étudie le ventre vide.",
             p2Title: "Soutien alimentaire d'urgence",
             p2Desc: "Assistance alimentaire rapide pour les familles confrontées à des difficultés extrêmes.",
             p3Title: "Espaces d'apprentissage sûrs",
             p3Desc: "Améliorer les installations scolaires pour garantir un environnement sain.",
-            cta: "Soutenir un étudiant"
+            cta: "Voir Plus"
         },
         vision: {
             vTitle: "Notre Vision",

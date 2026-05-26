@@ -29,6 +29,8 @@
     box-shadow: 0 40px 100px rgba(0, 0, 0, 0.3);
     transform: translateY(40px) scale(0.95);
     transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    max-height: 90vh;
+    overflow-y: auto;
 }
 
 .overlayOpen .modal {
@@ -64,7 +66,19 @@
 
 .header {
     text-align: center;
-    margin-bottom: 32px;
+    margin-bottom: 28px;
+}
+
+.headerIconWrap {
+    width: 56px;
+    height: 56px;
+    margin: 0 auto 16px;
+    background: rgba(var(--brand-rgb), 0.1);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--brand);
 }
 
 .title {
@@ -79,73 +93,87 @@
     color: var(--gray-400);
 }
 
-/* Step 1: Selection */
-.methodGrid {
+/* Preset amount grid */
+.presetGrid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-bottom: 24px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
 }
 
-.methodCard {
+.presetBtn {
     background: rgba(var(--white-rgb), 0.03);
     border: 1px solid rgba(var(--white-rgb), 0.08);
-    border-radius: 20px;
-    padding: 24px 16px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-}
-
-.methodCard:hover {
-    background: rgba(var(--white-rgb), 0.06);
-    border-color: var(--brand);
-    transform: translateY(-4px);
-}
-
-.methodActive {
-    background: rgba(var(--brand-rgb), 0.1) !important;
-    border-color: var(--brand) !important;
-}
-
-.methodIcon {
-    width: 40px;
-    height: 40px;
-    background: rgba(var(--brand-rgb), 0.1);
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--brand);
-}
-
-.methodLabel {
-    font-size: 15px;
-    font-weight: 600;
+    border-radius: 14px;
+    padding: 14px 8px;
     color: var(--white);
-}
-
-/* Forms */
-.form {
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    text-align: center;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    align-items: center;
+    gap: 2px;
 }
 
+.presetBtn small {
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--gray-500);
+    letter-spacing: 0.5px;
+}
+
+.presetBtn:hover {
+    background: rgba(var(--white-rgb), 0.06);
+    border-color: rgba(var(--white-rgb), 0.15);
+    transform: translateY(-2px);
+}
+
+.presetActive {
+    background: rgba(var(--brand-rgb), 0.12) !important;
+    border-color: var(--brand) !important;
+    color: var(--brand) !important;
+}
+
+.presetActive small {
+    color: var(--brand) !important;
+    opacity: 0.7;
+}
+
+/* Form inputs */
 .inputGroup {
     display: flex;
     flex-direction: column;
     gap: 8px;
+    margin-bottom: 16px;
 }
 
 .label {
     font-size: 13px;
     font-weight: 500;
     color: var(--gray-400);
+}
+
+.inputWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.inputPrefix {
+    position: absolute;
+    left: 16px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gray-500);
+    pointer-events: none;
+    z-index: 2;
+}
+
+.inputWrapper .input {
+    padding-left: 52px;
 }
 
 .input {
@@ -169,16 +197,50 @@
     color: var(--gray-500);
 }
 
-.row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
+/* Phone input with network badge */
+.phoneInputWrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.phoneInputWrap .input {
+    padding-right: 52px;
+}
+
+.networkBadge {
+    position: absolute;
+    right: 12px;
+    display: flex;
+    align-items: center;
+    pointer-events: none;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+/* Error banner */
+.errorBanner {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    background: rgba(239, 68, 68, 0.08);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: 12px;
+    color: #f87171;
+    font-size: 13px;
+    margin-bottom: 16px;
+    animation: fadeIn 0.3s ease;
 }
 
 /* Security Trust */
 .trustArea {
-    margin-top: 24px;
-    padding-top: 24px;
+    margin-top: 20px;
+    padding-top: 20px;
     border-top: 1px solid rgba(var(--white-rgb), 0.06);
     display: flex;
     flex-direction: column;
@@ -197,13 +259,8 @@
 .badgeRow {
     display: flex;
     align-items: center;
-    gap: 16px;
-    opacity: 0.6;
-}
-
-.badge {
-    height: 14px;
-    object-fit: contain;
+    gap: 12px;
+    opacity: 0.7;
 }
 
 /* Status Screen */
@@ -245,6 +302,29 @@
     margin-bottom: 32px;
 }
 
+/* Phone prompt hint during processing */
+.phonePromptHint {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 16px 20px;
+    background: rgba(var(--brand-rgb), 0.06);
+    border: 1px solid rgba(var(--brand-rgb), 0.15);
+    border-radius: 14px;
+    margin-top: 20px;
+    font-size: 13px;
+    color: var(--gray-300);
+    line-height: 1.5;
+    animation: pulseGlow 2s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+    0%, 100% { border-color: rgba(var(--brand-rgb), 0.1); }
+    50% { border-color: rgba(var(--brand-rgb), 0.3); }
+}
+
+/* Buttons */
 .actionBtn,
 .secondaryBtn {
     border: none;
@@ -266,14 +346,14 @@
     color: #fff;
 }
 
-.actionBtn:hover {
+.actionBtn:hover:not(:disabled) {
     transform: translateY(-2px);
     box-shadow: 0 10px 20px rgba(var(--brand-rgb), 0.3);
     background: var(--brand-light);
 }
 
 .actionBtn:disabled {
-    opacity: 0.5;
+    opacity: 0.4;
     cursor: not-allowed;
     transform: none;
 }
@@ -302,5 +382,16 @@
 @keyframes spin {
     to {
         transform: rotate(360deg);
+    }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+    .content {
+        padding: 32px 20px;
+    }
+
+    .presetGrid {
+        grid-template-columns: repeat(2, 1fr);
     }
 }

@@ -2,215 +2,221 @@
 import React, { useState, useEffect } from "react";
 import { useDonation } from "@/context/DonationContext";
 import { useLanguage } from "@/context/LanguageContext";
-import { X, CreditCard, Smartphone, Lock, CheckCircle, AlertCircle } from "lucide-react";
+import { X, Smartphone, Lock, CheckCircle, AlertCircle } from "lucide-react";
 import styles from "./DonationModal.module.css";
-import { useFlutterwave, closePaymentModal } from 'flutterwave-react-v3';
 
-type Step = "method" | "momo" | "card" | "processing" | "success" | "error";
+type Step = "form" | "processing" | "success" | "error";
 
-const VisaIcon = () => (
-    <svg width="48" height="32" viewBox="0 0 48 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect width="48" height="32" rx="4" fill="white" />
-        <path d="M18.88 22.02l2.36-11.45h3.76l-2.36 11.45h-3.76zm13.16-11.13c-.86-.34-2.2-.68-3.86-.68-4.24 0-7.22 2.22-7.25 5.42-.03 2.36 2.14 3.68 3.78 4.46 1.67.8 2.24 1.32 2.23 2.04-.02 1.1-1.34 1.62-2.58 1.62-1.72 0-2.64-.26-4.04-.88l-.56-.26-.6 3.66c1 .46 2.84.86 4.74.88 4.5 0 7.42-2.2 7.46-5.62.02-1.88-1.12-3.3-3.6-4.48-1.5-.76-2.42-1.28-2.42-2.06 0-.72.82-1.46 2.6-1.46 1.48 0 2.56.32 3.38.68l.4.18.57-3.48zM42.36 10.57h-3.5c-1.08 0-1.9.32-2.38 1.45l-6.66 15.68h3.94l.78-2.16h4.82l.46 2.16H44l-3.38-17.13h1.74zm-3.08 10.66l1.24-3.4.72 3.4h-1.96zm-26.1-10.66L9.5 22.18l-.34-1.7c-.64-2.18-2.62-4.54-4.84-5.72l3.12 11.83H11.5l5.96-16.1h-4.28z" fill="#1434CB" />
+const presetAmounts = [500, 1000, 2000, 5000, 10000, 25000];
+
+const MTNIcon = () => (
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+        <rect width="32" height="32" rx="8" fill="#FFCC00" />
+        <text x="16" y="21" textAnchor="middle" fill="#003B7C" fontWeight="bold" fontSize="10" fontFamily="Arial">MTN</text>
     </svg>
 );
 
-const MastercardIcon = () => (
-    <svg width="48" height="32" viewBox="0 0 48 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect width="48" height="32" rx="4" fill="white" />
-        <circle cx="19" cy="16" r="10" fill="#EB001B" />
-        <circle cx="29" cy="16" r="10" fill="#F79E1B" />
-        <path d="M24 8a10 10 0 0 0 0 16 10 10 0 0 0 0-16z" fill="#FF5F00" />
+const AirtelIcon = () => (
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+        <rect width="32" height="32" rx="8" fill="#ED1C24" />
+        <text x="16" y="21" textAnchor="middle" fill="white" fontWeight="bold" fontSize="8" fontFamily="Arial">Airtel</text>
     </svg>
 );
 
 export default function DonationModal() {
     const { isOpen, closeModal } = useDonation();
-    const { t, language } = useLanguage();
-    const [step, setStep] = useState<Step>("method");
+    const { t } = useLanguage();
+    const [step, setStep] = useState<Step>("form");
     const [amount, setAmount] = useState("");
-    const [momoPhone, setMomoPhone] = useState("");
-    const [momoNetwork, setMomoNetwork] = useState("MTN");
-    const [transactionId, setTransactionId] = useState("");
+    const [phone, setPhone] = useState("");
+    const [errorMsg, setErrorMsg] = useState("");
+    const [transactionRef, setTransactionRef] = useState("");
 
-    // Reset modal state when opened
+    // Reset state when modal opens
     useEffect(() => {
-        if (isOpen) setStep("method");
+        if (isOpen) {
+            setStep("form");
+            setAmount("");
+            setPhone("");
+            setErrorMsg("");
+            setTransactionRef("");
+        }
     }, [isOpen]);
 
-    const config = {
-        public_key: 'FLWPUBK_TEST-473d0979435a4d6537b0c797bc353273-X', // Test Key
-        tx_ref: Date.now().toString(),
-        amount: parseFloat(amount) || 0,
-        currency: 'RWF',
-        payment_options: 'card,mobilemoneyrwanda,ussd',
-        customer: {
-            email: 'user@example.com',
-            phone_number: momoPhone,
-            name: 'Valued Donor',
-        },
-        customizations: {
-            title: 'Impano Initiative',
-            description: t("donation.desc"),
-            logo: 'https://impano.vercel.app/images/logo.png',
-        },
+    const formatPhone = (value: string) => {
+        // Strip everything except digits
+        const digits = value.replace(/\D/g, "");
+        // Remove leading +250 or 250
+        const clean = digits.replace(/^(250)/, "");
+        return clean.slice(0, 10);
     };
 
-    const handleFlutterwavePayment = useFlutterwave(config);
-
-    const handleBack = () => {
-        setStep("method");
+    const getNetworkFromPhone = (phoneNum: string): string | null => {
+        const clean = phoneNum.replace(/\D/g, "").replace(/^(250)/, "");
+        if (clean.startsWith("078") || clean.startsWith("079")) return "MTN";
+        if (clean.startsWith("072") || clean.startsWith("073")) return "Airtel";
+        return null;
     };
 
-    const handleProcessPayment = () => {
-        if (!amount || parseFloat(amount) <= 0) return;
+    const detectedNetwork = getNetworkFromPhone(phone);
 
+    const handleDonate = async () => {
+        // Validate
+        if (!amount || parseFloat(amount) < 100) {
+            setErrorMsg(t("donation.minAmount") || "Minimum donation is 100 RWF");
+            return;
+        }
+
+        const cleanPhone = phone.replace(/\D/g, "").replace(/^(250)/, "");
+        if (!cleanPhone.startsWith("07") || cleanPhone.length !== 10) {
+            setErrorMsg(t("donation.invalidPhone") || "Please enter a valid phone number (07XXXXXXXX)");
+            return;
+        }
+
+        setErrorMsg("");
         setStep("processing");
 
-        handleFlutterwavePayment({
-            callback: (response) => {
-                if (response.status === "successful") {
-                    setTransactionId(response.transaction_id.toString());
-                    setStep("success");
-                } else {
-                    setStep("error");
-                }
-                closePaymentModal();
-            },
-            onClose: () => {
-                if (step === "processing") setStep("method");
-            },
-        });
+        try {
+            const res = await fetch("/api/donate", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    amount: parseFloat(amount),
+                    phone: cleanPhone,
+                }),
+            });
+
+            const data = await res.json();
+
+            if (res.ok && data.success) {
+                setTransactionRef(data.ref || "");
+                setStep("success");
+            } else {
+                setErrorMsg(data.error || "Payment failed");
+                setStep("error");
+            }
+        } catch {
+            setErrorMsg("Network error. Please check your connection.");
+            setStep("error");
+        }
     };
 
     if (!isOpen) return null;
 
     return (
-        <div className={`${styles.overlay} ${isOpen ? styles.overlayOpen : ""}`} onClick={(e) => e.target === e.currentTarget && closeModal()}>
+        <div
+            className={`${styles.overlay} ${isOpen ? styles.overlayOpen : ""}`}
+            onClick={(e) => e.target === e.currentTarget && closeModal()}
+        >
             <div className={styles.modal}>
                 <button className={styles.closeBtn} onClick={closeModal} aria-label="Close">
                     <X size={20} />
                 </button>
 
                 <div className={styles.content}>
-                    {step === "method" && (
+                    {step === "form" && (
                         <>
                             <div className={styles.header}>
-                                <h3 className={styles.title}>{t("donation.title")}</h3>
-                                <p className={styles.subtitle}>{t("donation.desc")}</p>
-                            </div>
-                            <div className={styles.methodGrid}>
-                                <div className={styles.methodCard} onClick={() => setStep("momo")}>
-                                    <div className={styles.methodIcon}><Smartphone /></div>
-                                    <span className={styles.methodLabel}>{t("donation.mobileMoney")}</span>
+                                <div className={styles.headerIconWrap}>
+                                    <Smartphone size={24} />
                                 </div>
-                                <div className={styles.methodCard} onClick={() => setStep("card")}>
-                                    <div className={styles.methodIcon}><CreditCard /></div>
-                                    <span className={styles.methodLabel}>{t("donation.cardPayment")}</span>
+                                <h3 className={styles.title}>{t("donation.title")}</h3>
+                                <p className={styles.subtitle}>{t("donation.momoDesc")}</p>
+                            </div>
+
+                            {/* Preset amounts */}
+                            <div className={styles.presetGrid}>
+                                {presetAmounts.map((preset) => (
+                                    <button
+                                        key={preset}
+                                        className={`${styles.presetBtn} ${amount === String(preset) ? styles.presetActive : ""}`}
+                                        onClick={() => setAmount(String(preset))}
+                                    >
+                                        {preset.toLocaleString()} <small>RWF</small>
+                                    </button>
+                                ))}
+                            </div>
+
+                            {/* Custom amount */}
+                            <div className={styles.inputGroup}>
+                                <label className={styles.label}>{t("donation.amount")} (RWF)</label>
+                                <div className={styles.inputWrapper}>
+                                    <span className={styles.inputPrefix}>RWF</span>
+                                    <input
+                                        type="number"
+                                        className={styles.input}
+                                        placeholder={t("donation.custom")}
+                                        value={amount}
+                                        onChange={(e) => setAmount(e.target.value)}
+                                        min="100"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Phone number */}
+                            <div className={styles.inputGroup}>
+                                <label className={styles.label}>{t("donation.phone")}</label>
+                                <div className={styles.phoneInputWrap}>
+                                    <input
+                                        type="tel"
+                                        className={styles.input}
+                                        placeholder="078 XXX XXXX"
+                                        value={phone}
+                                        onChange={(e) => setPhone(formatPhone(e.target.value))}
+                                        maxLength={10}
+                                    />
+                                    {detectedNetwork && (
+                                        <div className={styles.networkBadge}>
+                                            {detectedNetwork === "MTN" ? <MTNIcon /> : <AirtelIcon />}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* Error message */}
+                            {errorMsg && (
+                                <div className={styles.errorBanner}>
+                                    <AlertCircle size={14} />
+                                    <span>{errorMsg}</span>
+                                </div>
+                            )}
+
+                            {/* Donate button */}
+                            <button
+                                className={styles.actionBtn}
+                                onClick={handleDonate}
+                                disabled={!amount || !phone}
+                            >
+                                {t("donation.cta")} — {amount ? `${parseInt(amount).toLocaleString()} RWF` : "0 RWF"}
+                            </button>
+
+                            {/* Trust bar */}
+                            <div className={styles.trustArea}>
+                                <div className={styles.trustText}>
+                                    <Lock size={12} />
+                                    <span>{t("donation.securePayment")} <strong>Paypack</strong></span>
+                                </div>
+                                <div className={styles.badgeRow}>
+                                    <MTNIcon />
+                                    <AirtelIcon />
                                 </div>
                             </div>
                         </>
                     )}
 
-                    {step === "momo" && (
-                        <div className={styles.form}>
-                            <div className={styles.header}>
-                                <h3 className={styles.title}>{t("donation.mobileMoney")}</h3>
-                                <p className={styles.subtitle}>{t("donation.momoDesc")}</p>
-                            </div>
-                            <div className={styles.inputGroup}>
-                                <label className={styles.label}>{t("donation.amount")} (RWF)</label>
-                                <input
-                                    type="number"
-                                    className={styles.input}
-                                    placeholder={t("donation.custom")}
-                                    value={amount}
-                                    onChange={(e) => setAmount(e.target.value)}
-                                    autoFocus
-                                />
-                            </div>
-                            <div className={styles.inputGroup}>
-                                <label className={styles.label}>{t("donation.phone")}</label>
-                                <input
-                                    type="tel"
-                                    className={styles.input}
-                                    placeholder="078... / 079..."
-                                    value={momoPhone}
-                                    onChange={(e) => setMomoPhone(e.target.value)}
-                                />
-                            </div>
-                            <div className={styles.inputGroup}>
-                                <label className={styles.label}>{t("donation.network")}</label>
-                                <select className={styles.input} value={momoNetwork} onChange={(e) => setMomoNetwork(e.target.value)}>
-                                    <option value="MTN">MTN Rwanda</option>
-                                    <option value="Airtel">Airtel-Tigo</option>
-                                </select>
-                            </div>
-                            <button className={styles.actionBtn} onClick={handleProcessPayment}>
-                                {t("donation.cta")}
-                            </button>
-                            <button className={styles.secondaryBtn} onClick={handleBack}>
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                    <path d="M19 12H5M12 19l-7-7 7-7" />
-                                </svg>
-                                <span>{t("donation.goBack")}</span>
-                            </button>
-                        </div>
-                    )}
-
-                    {step === "card" && (
-                        <div className={styles.form}>
-                            <div className={styles.header}>
-                                <h3 className={styles.title}>{t("donation.cardPayment")}</h3>
-                                <p className={styles.subtitle}>{t("donation.cardPaymentDesc")}</p>
-                            </div>
-                            <div className={styles.inputGroup}>
-                                <label className={styles.label}>{t("donation.amount")} (RWF)</label>
-                                <input
-                                    type="number"
-                                    className={styles.input}
-                                    placeholder={t("donation.custom")}
-                                    value={amount}
-                                    onChange={(e) => setAmount(e.target.value)}
-                                />
-                            </div>
-                            <div className={styles.inputGroup}>
-                                <label className={styles.label}>{t("donation.name")}</label>
-                                <input type="text" className={styles.input} placeholder="John Doe" />
-                            </div>
-                            <div className={styles.inputGroup}>
-                                <label className={styles.label}>{t("donation.cardNumber")}</label>
-                                <input type="text" className={styles.input} placeholder="**** **** **** ****" />
-                            </div>
-                            <div className={styles.row}>
-                                <div className={styles.inputGroup}>
-                                    <label className={styles.label}>{t("donation.expiry")}</label>
-                                    <input type="text" className={styles.input} placeholder="MM / YY" />
-                                </div>
-                                <div className={styles.inputGroup}>
-                                    <label className={styles.label}>{t("donation.cvv")}</label>
-                                    <input type="text" className={styles.input} placeholder="123" />
-                                </div>
-                            </div>
-                            <button className={styles.actionBtn} onClick={handleProcessPayment}>
-                                {t("donation.cta")}
-                            </button>
-                            <button className={styles.secondaryBtn} onClick={handleBack}>
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                    <path d="M19 12H5M12 19l-7-7 7-7" />
-                                </svg>
-                                <span>{t("donation.goBack")}</span>
-                            </button>
-                        </div>
-                    )}
-
                     {step === "processing" && (
                         <div className={styles.statusContainer}>
-                            <div className={styles.statusIcon} style={{ color: 'var(--brand)' }}>
+                            <div className={styles.statusIcon} style={{ color: "var(--brand)" }}>
                                 <div className={styles.spinner} />
                             </div>
                             <h3 className={styles.statusTitle}>{t("donation.processing")}</h3>
-                            <p className={styles.statusDesc}>{t("donation.processingDesc")}</p>
+                            <p className={styles.statusDesc}>
+                                {t("donation.processingDesc")}
+                            </p>
+                            <div className={styles.phonePromptHint}>
+                                <Smartphone size={20} style={{ color: "var(--brand)" }} />
+                                <span>{t("donation.checkPhone") || "A prompt has been sent to your phone. Enter your PIN to confirm."}</span>
+                            </div>
                         </div>
                     )}
 
@@ -221,11 +227,19 @@ export default function DonationModal() {
                             </div>
                             <h3 className={styles.statusTitle}>{t("donation.successTitle")}</h3>
                             <p className={styles.statusDesc}>
-                                {t("contact.success")}
-                                <br /><br />
-                                <small style={{ opacity: 0.6 }}>{t("donation.transactionId")}: {transactionId}</small>
+                                {t("donation.thankYou") || "Thank you for your generous donation! Your support makes a real difference in children's lives."}
+                                {transactionRef && (
+                                    <>
+                                        <br /><br />
+                                        <small style={{ opacity: 0.6 }}>
+                                            {t("donation.transactionId")}: {transactionRef}
+                                        </small>
+                                    </>
+                                )}
                             </p>
-                            <button className={styles.actionBtn} onClick={closeModal}>{t("donation.close")}</button>
+                            <button className={styles.actionBtn} onClick={closeModal}>
+                                {t("donation.close")}
+                            </button>
                         </div>
                     )}
 
@@ -235,22 +249,13 @@ export default function DonationModal() {
                                 <AlertCircle size={48} />
                             </div>
                             <h3 className={styles.statusTitle}>{t("donation.errorTitle")}</h3>
-                            <p className={styles.statusDesc}>{t("contact.error")}</p>
-                            <button className={styles.actionBtn} onClick={() => setStep("method")}>{t("donation.tryAgain")}</button>
-                            <button className={styles.secondaryBtn} onClick={closeModal}>{t("donation.close")}</button>
-                        </div>
-                    )}
-
-                    {(step === "method" || step === "momo" || step === "card") && (
-                        <div className={styles.trustArea}>
-                            <div className={styles.trustText}>
-                                <Lock size={12} style={{ marginRight: '4px' }} />
-                                <span>{t("donation.securePayment")} <strong>Flutterwave</strong></span>
-                            </div>
-                            <div className={styles.badgeRow}>
-                                <VisaIcon />
-                                <MastercardIcon />
-                            </div>
+                            <p className={styles.statusDesc}>{errorMsg}</p>
+                            <button className={styles.actionBtn} onClick={() => setStep("form")}>
+                                {t("donation.tryAgain")}
+                            </button>
+                            <button className={styles.secondaryBtn} onClick={closeModal}>
+                                {t("donation.close")}
+                            </button>
                         </div>
                     )}
                 </div>

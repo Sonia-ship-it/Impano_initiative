@@ -4,7 +4,7 @@ import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
 import VisionMission from "@/components/VisionMission";
-import Programs from "@/components/Programs";
+import Gallery from "@/components/Gallery";
 import Impact from "@/components/Impact";
 import Team from "@/components/Team";
 import CTA from "@/components/CTA";
@@ -19,7 +19,7 @@ export default function Home() {
         <Hero />
         <About />
         <VisionMission />
-        <Programs />
+        <Gallery />
         <Impact />
         <Team />
         <CTA />

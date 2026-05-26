@@ -17,7 +17,7 @@ export default function Navbar() {
     const navLinks = [
         { label: t("nav.home"), href: "#home" },
         { label: t("nav.about"), href: "#about" },
-        { label: t("nav.programs"), href: "#programs" },
+        { label: t("nav.gallery"), href: "#gallery" },
         { label: t("nav.vision"), href: "#vision" },
         { label: t("nav.team"), href: "#team" },
         { label: t("nav.contact"), href: "#contact" },
@@ -28,7 +28,7 @@ export default function Navbar() {
             setScrolled(window.scrollY > 40);
 
             // Determine active section
-            const sections = ["home", "about", "programs", "vision", "team", "contact"];
+            const sections = ["home", "about", "gallery", "vision", "team", "contact"];
             for (let i = sections.length - 1; i >= 0; i--) {
                 const el = document.getElementById(sections[i]);
                 if (el) {
