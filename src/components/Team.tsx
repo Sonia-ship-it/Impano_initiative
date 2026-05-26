@@ -301,6 +301,8 @@ export default function Team() {
             color: "#3a9948",
             bio: t("team.bios.id"),
             image: "/images/diane.jpeg",
+            email: "ishimwedianah80@gmail.com",
+            phone: "0788640764"
         },
         {
             name: "UWASE SONIA",
