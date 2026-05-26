@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import { useRouter, usePathname } from "next/navigation";
 import { ThemeToggle } from "./ThemeToggle";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { useDonation } from "@/context/DonationContext";
@@ -13,11 +14,13 @@ export default function Navbar() {
     const [mobileOpen, setMobileOpen] = useState(false);
     const [activeSection, setActiveSection] = useState("home");
     const { openModal } = useDonation();
+    const router = useRouter();
+    const pathname = usePathname();
 
     const navLinks = [
         { label: t("nav.home"), href: "#home" },
         { label: t("nav.about"), href: "#about" },
-        { label: t("nav.gallery"), href: "#gallery" },
+        { label: t("nav.gallery"), href: "/gallery" },
         { label: t("nav.vision"), href: "#vision" },
         { label: t("nav.team"), href: "#team" },
         { label: t("nav.contact"), href: "#contact" },
@@ -28,7 +31,7 @@ export default function Navbar() {
             setScrolled(window.scrollY > 40);
 
             // Determine active section
-            const sections = ["home", "about", "gallery", "vision", "team", "contact"];
+            const sections = ["home", "about", "vision", "team", "contact"];
             for (let i = sections.length - 1; i >= 0; i--) {
                 const el = document.getElementById(sections[i]);
                 if (el) {
@@ -46,9 +49,17 @@ export default function Navbar() {
 
     const handleClick = (href: string) => {
         setMobileOpen(false);
-        const el = document.querySelector(href);
-        if (el) {
-            el.scrollIntoView({ behavior: "smooth" });
+        if (href.startsWith("/")) {
+            router.push(href);
+        } else {
+            if (pathname !== "/") {
+                router.push(`/${href}`);
+            } else {
+                const el = document.querySelector(href);
+                if (el) {
+                    el.scrollIntoView({ behavior: "smooth" });
+                }
+            }
         }
     };
 

@@ -241,19 +241,6 @@ const TeamCard = ({ member, index, language }: { member: TeamMember; index: numb
                     )}
                 </div>
 
-                <div className={styles.cardFooter}>
-                    <div className={styles.socials}>
-                        <a href="#" className={styles.socialIcon} aria-label="LinkedIn" style={{ '--accent': member.color } as React.CSSProperties}>
-                            <SocialIcons.Linkedin />
-                        </a>
-                        <a href="#" className={styles.socialIcon} aria-label="Twitter" style={{ '--accent': member.color } as React.CSSProperties}>
-                            <SocialIcons.Twitter />
-                        </a>
-                        <a href="#" className={styles.socialIcon} aria-label="Instagram" style={{ '--accent': member.color } as React.CSSProperties}>
-                            <SocialIcons.Instagram />
-                        </a>
-                    </div>
-                </div>
             </div>
         </div>
     );
