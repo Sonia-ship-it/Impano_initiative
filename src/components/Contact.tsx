@@ -2,7 +2,39 @@
 import React, { useState } from "react";
 import { useReveal } from "./useReveal";
 import { useLanguage } from "@/context/LanguageContext";
+import { initiativeContact, type SocialPlatform } from "@/config/social";
 import styles from "./Contact.module.css";
+
+const SocialIcon = ({ platform }: { platform: SocialPlatform }) => {
+    switch (platform) {
+        case "Instagram":
+            return (
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="2" y="2" width="20" height="20" rx="5" />
+                    <circle cx="12" cy="12" r="4" />
+                    <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none" />
+                </svg>
+            );
+        case "Twitter":
+            return (
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                </svg>
+            );
+        case "TikTok":
+            return (
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07z" />
+                </svg>
+            );
+        case "LinkedIn":
+            return (
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 4.126 0 2.065 2.065 0 0 1-2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                </svg>
+            );
+    }
+};
 
 export default function Contact() {
     const ref = useReveal();
@@ -12,7 +44,7 @@ export default function Contact() {
         email: "",
         message: "",
     });
-
+    const [activeChannel, setActiveChannel] = useState<SocialPlatform | null>(null);
     const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
     const handleChange = (
@@ -53,125 +85,177 @@ export default function Contact() {
             setStatus("error");
         }
 
-        // Reset status after a few seconds
         setTimeout(() => setStatus("idle"), 7000);
     };
 
     return (
         <section className={styles.section} id="contact" ref={ref}>
+            <div className={styles.meshBg} />
+            <div className={styles.orbA} />
+            <div className={styles.orbB} />
+            <div className={styles.gridLines} />
+
             <div className={styles.container}>
                 <div className={`${styles.header} reveal`}>
-                    <div className={styles.sectionLabel}>
-                        <div className={styles.labelLine} />
-                        <span>{t("contact.label")}</span>
-                        <div className={styles.labelLine} />
+                    <div className={styles.sectionIndex}>04</div>
+                    <div className={styles.headerContent}>
+                        <div className={styles.sectionLabel}>
+                            <span className={styles.labelPulse} />
+                            <span>{t("contact.label")}</span>
+                        </div>
+                        <h2 className={`${styles.heading} display-text`}>
+                            {t("contact.heading")}{" "}
+                            <span className="gradient-text">{t("contact.headingSpan")}</span>
+                        </h2>
+                        <p className={styles.headerSub}>{t("contact.sub")}</p>
                     </div>
-                    <h2 className={styles.heading}>
-                        {t("contact.heading")} <span className="gradient-text">{t("contact.headingSpan")}</span>
-                    </h2>
-                    <p className={styles.headerSub}>
-                        {t("contact.sub")}
-                    </p>
                 </div>
 
-                <div className={styles.grid}>
-                    {/* Contact Info Cards */}
-                    <div className={`${styles.infoCol} reveal-left`}>
-                        <div className={styles.infoCard}>
-                            <div className={styles.infoIcon}>
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                                    <polyline points="22,6 12,13 2,6" />
+                <div className={styles.stage}>
+                    {/* Bento contact hub */}
+                    <div className={`${styles.bento} reveal-left`}>
+                        <a
+                            href={`mailto:${initiativeContact.email}`}
+                            className={styles.emailTile}
+                        >
+                            <span className={styles.tileTag}>Direct Line</span>
+                            <span className={`${styles.emailDisplay} display-text`}>
+                                {initiativeContact.email}
+                            </span>
+                            <span className={styles.tileAction}>
+                                Send a signal
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12" />
+                                    <polyline points="12 5 19 12 12 19" />
                                 </svg>
+                            </span>
+                            <div className={styles.tileGlow} />
+                        </a>
+
+                        <div className={styles.locationTile}>
+                            <div className={styles.coordsRing}>
+                                <span className={styles.coordsDot} />
                             </div>
                             <div>
-                                <h4 className={styles.infoLabel}>Email</h4>
-                                <a
-                                    href="mailto:uwasesonia43@gmail.com"
-                                    className={styles.infoValue}
-                                >
-                                    uwasesonia43@gmail.com
-                                </a>
+                                <span className={styles.tileTag}>Base</span>
+                                <p className={`${styles.locationName} display-text`}>
+                                    {initiativeContact.location}
+                                </p>
+                                <p className={styles.coords}>{initiativeContact.coords}</p>
                             </div>
                         </div>
 
-                        <div className={styles.infoCard}>
-                            <div className={styles.infoIcon}>
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--green-light)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                                    <circle cx="12" cy="10" r="3" />
-                                </svg>
+                        <div className={styles.socialHub}>
+                            <div className={styles.hubHeader}>
+                                <span className={styles.tileTag}>Channels</span>
+                                <span className={styles.hubLive}>
+                                    <span className={styles.liveDot} />
+                                    Live
+                                </span>
                             </div>
-                            <div>
-                                <h4 className={styles.infoLabel}>Location</h4>
-                                <p className={styles.infoValue}>Rwanda</p>
-                            </div>
-                        </div>
-
-                        <div className={styles.infoCard}>
-                            <div className={styles.infoIcon}>
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-                                </svg>
-                            </div>
-                            <div>
-                                <h4 className={styles.infoLabel}>{t("about.badge")}</h4>
-                                <p className={styles.infoValue}>{t("footer.subTagline")}</p>
+                            <div className={styles.channelGrid}>
+                                {initiativeContact.social.map((item, i) => (
+                                    <a
+                                        key={item.platform}
+                                        href={item.href}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className={`${styles.channel} ${activeChannel === item.platform ? styles.channelActive : ""}`}
+                                        style={{
+                                            "--ch-accent": item.accent,
+                                            "--ch-rgb": item.accentRgb,
+                                            "--ch-delay": `${i * 0.08}s`,
+                                        } as React.CSSProperties}
+                                        onMouseEnter={() => setActiveChannel(item.platform)}
+                                        onMouseLeave={() => setActiveChannel(null)}
+                                    >
+                                        <span className={styles.channelIndex}>{item.shortLabel}</span>
+                                        <span className={styles.channelIcon}>
+                                            <SocialIcon platform={item.platform} />
+                                        </span>
+                                        <span className={styles.channelPlatform}>{item.platform}</span>
+                                        <span className={styles.channelLabel}>{item.label}</span>
+                                        <span className={styles.channelArrow}>↗</span>
+                                    </a>
+                                ))}
                             </div>
                         </div>
                     </div>
 
-                    {/* Contact Form */}
+                    {/* Transmission form */}
                     <form
-                        className={`${styles.form} reveal-right`}
+                        className={`${styles.transmission} reveal-right`}
                         onSubmit={handleSubmit}
                     >
-                        <div className={styles.formGroup}>
-                            <label htmlFor="contact-name" className={styles.label}>
-                                {t("contact.formName")}
-                            </label>
-                            <input
-                                type="text"
-                                id="contact-name"
-                                name="name"
-                                value={formData.name}
-                                onChange={handleChange}
-                                placeholder={t("contact.formNamePlaceholder")}
-                                required
-                                className={styles.input}
-                            />
+                        <div className={styles.transmissionHeader}>
+                            <div>
+                                <span className={styles.tileTag}>Transmission</span>
+                                <h3 className={`${styles.formTitle} display-text`}>Drop us a line</h3>
+                            </div>
+                            <div className={styles.signalBars}>
+                                {[...Array(5)].map((_, i) => (
+                                    <span key={i} style={{ animationDelay: `${i * 0.15}s` }} />
+                                ))}
+                            </div>
                         </div>
-                        <div className={styles.formGroup}>
-                            <label htmlFor="contact-email" className={styles.label}>
-                                {t("contact.formEmail")}
-                            </label>
-                            <input
-                                type="email"
-                                id="contact-email"
-                                name="email"
-                                value={formData.email}
-                                onChange={handleChange}
-                                placeholder={t("contact.formEmailPlaceholder")}
-                                required
-                                className={styles.input}
-                            />
+
+                        <div className={styles.fieldRow}>
+                            <span className={styles.fieldIndex}>01</span>
+                            <div className={styles.fieldWrap}>
+                                <label htmlFor="contact-name" className={styles.label}>
+                                    {t("contact.formName")}
+                                </label>
+                                <input
+                                    type="text"
+                                    id="contact-name"
+                                    name="name"
+                                    value={formData.name}
+                                    onChange={handleChange}
+                                    placeholder={t("contact.formNamePlaceholder")}
+                                    required
+                                    className={styles.input}
+                                />
+                            </div>
                         </div>
-                        <div className={styles.formGroup}>
-                            <label htmlFor="contact-message" className={styles.label}>
-                                {t("contact.formMessage")}
-                            </label>
-                            <circle cx="12" cy="12" r="10" />
-                            <textarea
-                                id="contact-message"
-                                name="message"
-                                value={formData.message}
-                                onChange={handleChange}
-                                placeholder={t("contact.formMessagePlaceholder")}
-                                rows={5}
-                                required
-                                className={styles.textarea}
-                            />
+
+                        <div className={styles.fieldRow}>
+                            <span className={styles.fieldIndex}>02</span>
+                            <div className={styles.fieldWrap}>
+                                <label htmlFor="contact-email" className={styles.label}>
+                                    {t("contact.formEmail")}
+                                </label>
+                                <input
+                                    type="email"
+                                    id="contact-email"
+                                    name="email"
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                    placeholder={t("contact.formEmailPlaceholder")}
+                                    required
+                                    className={styles.input}
+                                />
+                            </div>
                         </div>
+
+                        <div className={styles.fieldRow}>
+                            <span className={styles.fieldIndex}>03</span>
+                            <div className={styles.fieldWrap}>
+                                <label htmlFor="contact-message" className={styles.label}>
+                                    {t("contact.formMessage")}
+                                </label>
+                                <textarea
+                                    id="contact-message"
+                                    name="message"
+                                    value={formData.message}
+                                    onChange={handleChange}
+                                    placeholder={t("contact.formMessagePlaceholder")}
+                                    rows={5}
+                                    required
+                                    className={styles.textarea}
+                                />
+                            </div>
+                        </div>
+
                         {status === "success" && (
                             <div className={styles.successMessage}>
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -191,21 +275,26 @@ export default function Contact() {
                                 <span>{t("contact.error")}</span>
                             </div>
                         )}
+
                         <button
                             type="submit"
                             className={styles.submitBtn}
                             id="contact-submit"
                             disabled={status === "loading"}
                         >
-                            <span>{status === "loading" ? t("contact.sending") : t("contact.formSubmit")}</span>
-                            {status === "loading" ? (
-                                <div className={styles.spinner} />
-                            ) : (
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                                    <line x1="22" y1="2" x2="11" y2="13" />
-                                    <polygon points="22 2 15 22 11 13 2 9 22 2" />
-                                </svg>
-                            )}
+                            <span className={styles.btnText}>
+                                {status === "loading" ? t("contact.sending") : t("contact.formSubmit")}
+                            </span>
+                            <span className={styles.btnIcon}>
+                                {status === "loading" ? (
+                                    <div className={styles.spinner} />
+                                ) : (
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                        <line x1="22" y1="2" x2="11" y2="13" />
+                                        <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                                    </svg>
+                                )}
+                            </span>
                         </button>
                     </form>
                 </div>

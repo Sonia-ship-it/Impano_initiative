@@ -1,7 +1,25 @@
 .footer {
     position: relative;
-    padding: 80px 24px 40px;
+    padding: 0 24px 40px;
     background: rgba(var(--white-rgb), 0.01);
+    overflow: hidden;
+}
+
+.watermark {
+    position: absolute;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: clamp(120px, 18vw, 220px);
+    letter-spacing: -0.04em;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.03);
+    pointer-events: none;
+    user-select: none;
+    white-space: nowrap;
+    z-index: 0;
 }
 
 .topBorder {
@@ -10,19 +28,63 @@
     left: 0;
     right: 0;
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(240, 150, 32, 0.15), rgba(45, 122, 58, 0.1), transparent);
+    background: linear-gradient(90deg, transparent, rgba(240, 150, 32, 0.2), rgba(45, 122, 58, 0.15), transparent);
+}
+
+/* Marquee strip */
+.marquee {
+    overflow: hidden;
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    margin-bottom: 64px;
+    mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
+}
+
+.marqueeTrack {
+    display: flex;
+    gap: 48px;
+    width: max-content;
+    animation: marqueeScroll 30s linear infinite;
+}
+
+.marqueeItem {
+    display: inline-flex;
+    align-items: center;
+    gap: 48px;
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gray-600);
+    white-space: nowrap;
+}
+
+.marqueeDot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--brand);
+    opacity: 0.5;
+}
+
+@keyframes marqueeScroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
 }
 
 .container {
     max-width: 1200px;
     margin: 0 auto;
+    position: relative;
+    z-index: 1;
 }
 
 .top {
     display: grid;
-    grid-template-columns: 2fr 1fr 1.5fr;
+    grid-template-columns: 2fr 1fr 1.2fr;
     gap: 64px;
-    margin-bottom: 60px;
+    margin-bottom: 48px;
 }
 
 .brand {
@@ -32,27 +94,38 @@
 .logoRow {
     display: flex;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 16px;
+    gap: 14px;
+    margin-bottom: 20px;
+}
+
+.logoFrame {
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(240, 150, 32, 0.06);
+    border: 1px solid rgba(240, 150, 32, 0.12);
+    border-radius: 14px;
+    clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
 }
 
 .logoImg {
-    width: 44px;
-    height: 44px;
+    width: 40px;
+    height: 40px;
     object-fit: contain;
 }
 
 .logoTitle {
-    font-family: 'Outfit', sans-serif;
     font-weight: 800;
-    font-size: 18px;
+    font-size: 20px;
     letter-spacing: 2px;
     color: var(--brand);
     line-height: 1.1;
 }
 
 .logoSub {
-    font-family: 'Outfit', sans-serif;
+    font-family: var(--body);
     font-weight: 400;
     font-size: 9px;
     letter-spacing: 3px;
@@ -61,7 +134,7 @@
 }
 
 .brandDesc {
-    font-family: 'Outfit', sans-serif;
+    font-family: var(--body);
     font-weight: 300;
     font-size: 14px;
     line-height: 1.8;
@@ -69,36 +142,163 @@
 }
 
 .colTitle {
-    font-family: 'Outfit', sans-serif;
+    font-family: var(--display);
     font-weight: 700;
-    font-size: 13px;
+    font-size: 12px;
     color: var(--white);
-    letter-spacing: 1px;
+    letter-spacing: 2px;
     text-transform: uppercase;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
 }
 
-.linksCol,
-.contactCol {
+.navList {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 4px;
 }
 
 .footerLink {
-    font-family: 'Outfit', sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--body);
     font-weight: 400;
     font-size: 14px;
     color: var(--gray-500);
     text-decoration: none;
+    padding: 8px 0;
     transition: all 0.3s ease;
     cursor: pointer;
-    word-break: break-all;
+}
+
+.linkIndex {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: 10px;
+    color: var(--gray-700);
+    letter-spacing: 1px;
+    transition: color 0.3s ease;
 }
 
 .footerLink:hover {
     color: var(--brand);
-    transform: translateX(4px);
+    transform: translateX(6px);
+}
+
+.footerLink:hover .linkIndex {
+    color: var(--brand);
+}
+
+.contactCol {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.emailLink {
+    font-family: var(--body);
+    font-weight: 500;
+    font-size: 14px;
+    color: var(--white);
+    text-decoration: none;
+    word-break: break-all;
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.emailLink:hover {
+    border-color: rgba(240, 150, 32, 0.2);
+    color: var(--brand);
+    background: rgba(240, 150, 32, 0.04);
+}
+
+.locationTag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--body);
+    font-size: 13px;
+    color: var(--gray-500);
+}
+
+.locationDot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--green-light);
+}
+
+/* Floating social dock */
+.socialDock {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 24px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 100px;
+    margin-bottom: 40px;
+    backdrop-filter: blur(12px);
+}
+
+.dockLabel {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gray-500);
+}
+
+.dockIcons {
+    display: flex;
+    gap: 8px;
+}
+
+.dockIcon {
+    --dock-accent: var(--brand);
+    --dock-rgb: 240, 150, 32;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    color: var(--gray-400);
+    text-decoration: none;
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.dockIcon::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle, rgba(var(--dock-rgb), 0.2), transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.dockIcon:hover {
+    color: var(--dock-accent);
+    border-color: rgba(var(--dock-rgb), 0.4);
+    transform: translateY(-4px) scale(1.08);
+    box-shadow: 0 8px 24px rgba(var(--dock-rgb), 0.2);
+}
+
+.dockIcon:hover::before {
+    opacity: 1;
+}
+
+.dockIcon svg {
+    position: relative;
+    z-index: 1;
 }
 
 .bottom {
@@ -109,35 +309,49 @@
     border-top: 1px solid rgba(var(--white-rgb), 0.04);
 }
 
-.copyright {
-    font-family: 'Outfit', sans-serif;
-    font-weight: 400;
-    font-size: 13px;
-    color: var(--gray-600);
+.bottomLinks {
+    display: flex;
+    align-items: center;
+    gap: 24px;
 }
 
+.copyright,
 .madeWith {
-    font-family: 'Outfit', sans-serif;
+    font-family: var(--body);
     font-weight: 400;
     font-size: 13px;
     color: var(--gray-600);
 }
 
-.heart {
-    color: var(--brand);
-    animation: heartbeat 1.5s ease-in-out infinite;
+.adminLink {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 100px;
+    font-family: var(--body);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--gray-500);
+    text-decoration: none;
+    transition: all 0.3s ease;
 }
 
-@keyframes heartbeat {
+.adminLink:hover {
+    background: rgba(240, 150, 32, 0.08);
+    border-color: rgba(240, 150, 32, 0.2);
+    color: var(--brand);
+    transform: translateY(-2px);
+}
 
-    0%,
-    100% {
-        transform: scale(1);
-    }
+.adminLink svg {
+    transition: transform 0.3s ease;
+}
 
-    50% {
-        transform: scale(1.2);
-    }
+.adminLink:hover svg {
+    transform: scale(1.1);
 }
 
 @media (max-width: 768px) {
@@ -147,12 +361,24 @@
     }
 
     .footer {
-        padding: 60px 20px 32px;
+        padding: 0 20px 32px;
+    }
+
+    .socialDock {
+        flex-direction: column;
+        gap: 16px;
+        border-radius: 24px;
+        padding: 20px;
     }
 
     .bottom {
         flex-direction: column;
         gap: 8px;
         text-align: center;
+    }
+
+    .watermark {
+        font-size: 80px;
+        bottom: 40px;
     }
 }

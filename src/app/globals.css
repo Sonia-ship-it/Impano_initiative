@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Syne:wght@400;500;600;700;800&display=swap');
 @import "tailwindcss";
 
 :root {
@@ -28,6 +28,9 @@
   --radius-sm: 10px;
   --radius-lg: 24px;
   --radius-xl: 32px;
+  --display: 'Syne', sans-serif;
+  --body: 'Outfit', sans-serif;
+  --transition-smooth: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 [data-theme='light'] {
@@ -65,6 +68,9 @@ html {
   scroll-behavior: smooth;
   scroll-padding-top: 80px;
   font-family: 'Outfit', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 body {
@@ -74,11 +80,13 @@ body {
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
+  font-feature-settings: "kern" 1, "liga" 1;
 }
 
-/* Custom Scrollbar */
+/* Enhanced Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 10px;
 }
 
 ::-webkit-scrollbar-track {
@@ -86,25 +94,33 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--brand);
+  background: linear-gradient(180deg, var(--brand), var(--brand-dark));
   border-radius: 100px;
+  border: 2px solid var(--dark);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--brand-light);
+  background: linear-gradient(180deg, var(--brand-light), var(--brand));
 }
 
-/* Selection */
+/* Enhanced Selection */
 ::selection {
-  background: rgba(240, 150, 32, 0.3);
+  background: rgba(240, 150, 32, 0.25);
   color: var(--white);
+  text-shadow: none;
 }
 
-/* Animations */
+::-moz-selection {
+  background: rgba(240, 150, 32, 0.25);
+  color: var(--white);
+  text-shadow: none;
+}
+
+/* Animations - Enhanced and Smoother */
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(40px);
+    transform: translateY(50px);
   }
 
   to {
@@ -116,7 +132,7 @@ body {
 @keyframes fadeInDown {
   from {
     opacity: 0;
-    transform: translateY(-30px);
+    transform: translateY(-40px);
   }
 
   to {
@@ -128,7 +144,7 @@ body {
 @keyframes fadeInLeft {
   from {
     opacity: 0;
-    transform: translateX(-40px);
+    transform: translateX(-50px);
   }
 
   to {
@@ -140,7 +156,7 @@ body {
 @keyframes fadeInRight {
   from {
     opacity: 0;
-    transform: translateX(40px);
+    transform: translateX(50px);
   }
 
   to {
@@ -152,7 +168,7 @@ body {
 @keyframes scaleIn {
   from {
     opacity: 0;
-    transform: scale(0.9);
+    transform: scale(0.85);
   }
 
   to {
@@ -169,7 +185,7 @@ body {
   }
 
   50% {
-    transform: translateY(-12px);
+    transform: translateY(-16px);
   }
 }
 
@@ -185,12 +201,12 @@ body {
 
 @keyframes pulse-ring {
   0% {
-    transform: scale(0.8);
+    transform: scale(0.85);
     opacity: 1;
   }
 
   100% {
-    transform: scale(2.2);
+    transform: scale(2.5);
     opacity: 0;
   }
 }
@@ -219,28 +235,39 @@ body {
   }
 }
 
+@keyframes slideInScale {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 .animate-fade-in-up {
-  animation: fadeInUp 0.8s ease-out forwards;
+  animation: fadeInUp 0.9s var(--transition-smooth) forwards;
 }
 
 .animate-fade-in-down {
-  animation: fadeInDown 0.8s ease-out forwards;
+  animation: fadeInDown 0.9s var(--transition-smooth) forwards;
 }
 
 .animate-fade-in-left {
-  animation: fadeInLeft 0.8s ease-out forwards;
+  animation: fadeInLeft 0.9s var(--transition-smooth) forwards;
 }
 
 .animate-fade-in-right {
-  animation: fadeInRight 0.8s ease-out forwards;
+  animation: fadeInRight 0.9s var(--transition-smooth) forwards;
 }
 
 .animate-scale-in {
-  animation: scaleIn 0.8s ease-out forwards;
+  animation: scaleIn 0.9s var(--transition-smooth) forwards;
 }
 
 .animate-float {
-  animation: float 4s ease-in-out infinite;
+  animation: float 5s ease-in-out infinite;
 }
 
 .delay-100 {
@@ -275,11 +302,12 @@ body {
   animation-delay: 0.8s;
 }
 
-/* Intersection observer animation */
+/* Intersection observer animation - Enhanced */
 .reveal {
   opacity: 0;
-  transform: translateY(40px);
-  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateY(50px);
+  transition: all 1s var(--transition-smooth);
+  will-change: opacity, transform;
 }
 
 .reveal.visible {
@@ -289,8 +317,9 @@ body {
 
 .reveal-left {
   opacity: 0;
-  transform: translateX(-50px);
-  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateX(-60px);
+  transition: all 1s var(--transition-smooth);
+  will-change: opacity, transform;
 }
 
 .reveal-left.visible {
@@ -300,8 +329,9 @@ body {
 
 .reveal-right {
   opacity: 0;
-  transform: translateX(50px);
-  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateX(60px);
+  transition: all 1s var(--transition-smooth);
+  will-change: opacity, transform;
 }
 
 .reveal-right.visible {
@@ -309,41 +339,142 @@ body {
   transform: translateX(0);
 }
 
-/* Glass Effect */
+/* Enhanced Glass Effect */
 .glass {
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
 .glass-brand {
-  background: rgba(240, 150, 32, 0.05);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(240, 150, 32, 0.12);
+  background: rgba(240, 150, 32, 0.06);
+  backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(240, 150, 32, 0.15);
+  box-shadow: 0 8px 32px rgba(240, 150, 32, 0.1);
 }
 
-/* Gradient text */
+/* Enhanced Gradient text */
 .gradient-text {
   background: linear-gradient(135deg, var(--brand), var(--brand-light), var(--brand));
   background-size: 200% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: shimmer 4s linear infinite;
+  animation: shimmer 5s linear infinite;
+  will-change: background-position;
 }
 
 .gradient-text-green {
   background: linear-gradient(135deg, var(--green), var(--green-light));
+  background-size: 200% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-/* Glow effects */
+/* Enhanced Glow effects */
 .glow-brand {
-  box-shadow: 0 0 30px rgba(240, 150, 32, 0.15), 0 0 60px rgba(240, 150, 32, 0.05);
+  box-shadow: 
+    0 0 40px rgba(240, 150, 32, 0.2), 
+    0 0 80px rgba(240, 150, 32, 0.08),
+    0 4px 24px rgba(0, 0, 0, 0.1);
 }
 
 .glow-green {
-  box-shadow: 0 0 30px rgba(45, 122, 58, 0.15), 0 0 60px rgba(45, 122, 58, 0.05);
+  box-shadow: 
+    0 0 40px rgba(45, 122, 58, 0.2), 
+    0 0 80px rgba(45, 122, 58, 0.08),
+    0 4px 24px rgba(0, 0, 0, 0.1);
+}
+
+/* Display typography */
+.display-text {
+  font-family: var(--display);
+  letter-spacing: -0.03em;
+  font-feature-settings: "kern" 1, "liga" 1;
+}
+
+/* Enhanced Mesh gradient surface */
+.mesh-surface {
+  background:
+    radial-gradient(ellipse 80% 60% at 10% 20%, rgba(240, 150, 32, 0.1), transparent 50%),
+    radial-gradient(ellipse 60% 50% at 90% 80%, rgba(58, 153, 72, 0.08), transparent 50%),
+    var(--dark);
+}
+
+/* Animated border gradient - Enhanced */
+@property --border-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.border-glow {
+  --border-angle: 0deg;
+  border: 1px solid transparent;
+  background:
+    linear-gradient(var(--dark-card), var(--dark-card)) padding-box,
+    conic-gradient(from var(--border-angle), var(--brand), var(--green-light), var(--brand)) border-box;
+  animation: borderSpin 8s linear infinite;
+}
+
+@keyframes borderSpin {
+  to {
+    --border-angle: 360deg;
+  }
+}
+
+/* Cut-corner panel - Enhanced */
+.cut-panel {
+  clip-path: polygon(0 0, calc(100% - 24px) 0, 100% 24px, 100% 100%, 24px 100%, 0 calc(100% - 24px));
+}
+
+/* Smooth Focus States */
+*:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+/* Enhanced Button Styles */
+button, a {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* Improved Loading States */
+@keyframes pulse-subtle {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+.loading {
+  animation: pulse-subtle 2s ease-in-out infinite;
+}
+
+/* Micro-interactions */
+@keyframes tap-feedback {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.96); }
+  100% { transform: scale(1); }
+}
+
+.tap-feedback:active {
+  animation: tap-feedback 0.2s ease-out;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

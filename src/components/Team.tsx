@@ -5,28 +5,6 @@ import { useReveal } from "./useReveal";
 import { useLanguage } from "@/context/LanguageContext";
 import styles from "./Team.module.css";
 
-const SocialIcons = {
-    Twitter: () => (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z" />
-        </svg>
-    ),
-    Linkedin: () => (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-            <rect x="2" y="9" width="4" height="12" />
-            <circle cx="4" cy="4" r="2" />
-        </svg>
-    ),
-    Instagram: () => (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-        </svg>
-    ),
-};
-
 const RoleIcons = {
     Founder: () => (
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -136,26 +114,17 @@ const TeamCard = ({ member, index, language }: { member: TeamMember; index: numb
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
         
-        const cardWidth = rect.width;
-        const cardHeight = rect.height;
-        const centerX = cardWidth / 2;
-        const centerY = cardHeight / 2;
-        
-        const rotateX = ((y - centerY) / centerY) * -8; // Max 8 degrees tilt
-        const rotateY = ((x - centerX) / centerX) * 8;
-        
-        card.style.setProperty("--tilt-x", `${rotateX}deg`);
-        card.style.setProperty("--tilt-y", `${rotateY}deg`);
         card.style.setProperty("--mouse-x", `${x}px`);
         card.style.setProperty("--mouse-y", `${y}px`);
     };
 
     const handleMouseLeave = () => {
         if (!cardRef.current) return;
-        const card = cardRef.current;
-        card.style.setProperty("--tilt-x", `0deg`);
-        card.style.setProperty("--tilt-y", `0deg`);
+        cardRef.current.style.setProperty("--mouse-x", `50%`);
+        cardRef.current.style.setProperty("--mouse-y", `50%`);
     };
+
+    const cardIndex = String(index + 1).padStart(2, "0");
 
     return (
         <div 
@@ -163,84 +132,70 @@ const TeamCard = ({ member, index, language }: { member: TeamMember; index: numb
             className={`${styles.card} reveal`}
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
-            style={{ transitionDelay: `${index * 0.08}s` }}
+            style={{ transitionDelay: `${index * 0.1}s` }}
         >
             <div className={styles.cardInner}>
-                {/* Background glow orbs that animate on mouse interaction */}
                 <div className={styles.cardGlow} style={{ background: member.color }} />
-                
-                {/* Custom colored line divider */}
-                <div className={styles.topLine} style={{ background: member.color }} />
+                <div className={styles.indexBadge} style={{ background: `${member.color}15`, color: member.color }}>
+                    {cardIndex}
+                </div>
 
-                <div className={styles.cardHeader}>
-                    <div className={styles.initialsPortal} style={{ borderColor: `${member.color}25` }}>
-                        <div className={styles.portalOrb} style={{ background: member.color }} />
-                        <div className={styles.portalOrbOuter} style={{ borderColor: `${member.color}15` }} />
-                        
-                        <div className={styles.portalImageWrapper}>
-                            {member.image ? (
-                                <Image
-                                    src={member.image}
-                                    alt={member.name}
-                                    width={76}
-                                    height={76}
-                                    className={styles.portalImage}
-                                />
-                            ) : (
-                                <span className={styles.portalInitials} style={{ color: member.color }}>
-                                    {member.initials}
-                                </span>
-                            )}
-                        </div>
-                    </div>
-
-                    <div className={styles.headerText}>
-                        <div className={styles.focusBadge} style={{ background: `${member.color}12`, border: `1px solid ${member.color}25` }}>
-                            <span className={styles.focusIcon} style={{ color: member.color }}>
-                                {getRoleIcon(member.initials)}
+                {/* Large visible portrait */}
+                <div className={styles.portraitSection}>
+                    <div className={styles.imageWrapper}>
+                        {member.image ? (
+                            <Image
+                                src={member.image}
+                                alt={member.name}
+                                width={320}
+                                height={380}
+                                className={styles.memberImage}
+                            />
+                        ) : (
+                            <span className={styles.initials} style={{ color: member.color }}>
+                                {member.initials}
                             </span>
-                            <span className={styles.focusLabel} style={{ color: member.color }}>
-                                {activeFocus}
-                            </span>
-                        </div>
-                        <h3 className={styles.name}>{member.name}</h3>
-                        <p className={styles.role}>{member.role}</p>
+                        )}
+                        <div className={styles.imageOverlay} style={{ background: `linear-gradient(180deg, transparent 50%, ${member.color}15 100%)` }} />
                     </div>
                 </div>
 
-                <div className={styles.cardBody}>
-                    <svg className={styles.quoteIcon} style={{ fill: `${member.color}08` }} viewBox="0 0 24 24" width="48" height="48">
-                        <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
-                    </svg>
-                    <p className={styles.bio}>{member.bio}</p>
+                {/* Info section - placed below image */}
+                <div className={styles.infoSection}>
+                    <h3 className={styles.memberName}>{member.name}</h3>
+                    <div className={styles.focusRow}>
+                        <span className={styles.focusIcon} style={{ color: member.color }}>
+                            {getRoleIcon(member.initials)}
+                        </span>
+                        <p className={styles.focusText} style={{ color: member.color }}>
+                            {activeFocus}
+                        </p>
+                    </div>
+                    <p className={styles.memberRole}>{member.role}</p>
+                    <p className={styles.memberBio}>{member.bio}</p>
 
                     {(member.email || member.phone) && (
-                        <div className={styles.contactInfo}>
+                        <div className={styles.contactLinks}>
                             {member.email && (
-                                <a href={`mailto:${member.email}`} className={styles.contactItem} style={{ '--accent': member.color } as React.CSSProperties}>
-                                    <span className={styles.contactIcon}>
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                                            <polyline points="22,6 12,13 2,6" />
-                                        </svg>
-                                    </span>
-                                    {member.email}
+                                <a href={`mailto:${member.email}`} className={styles.contactLink} style={{ '--hover-color': member.color } as React.CSSProperties}>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                                        <polyline points="22,6 12,13 2,6" />
+                                    </svg>
+                                    <span>{member.email}</span>
                                 </a>
                             )}
                             {member.phone && (
-                                <a href={`tel:${member.phone.replace(/\s+/g, '')}`} className={styles.contactItem} style={{ '--accent': member.color } as React.CSSProperties}>
-                                    <span className={styles.contactIcon}>
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-                                        </svg>
-                                    </span>
-                                    {member.phone}
+                                <a href={`tel:${member.phone.replace(/\s+/g, '')}`} className={styles.contactLink} style={{ '--hover-color': member.color } as React.CSSProperties}>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                                    </svg>
+                                    <span>{member.phone}</span>
                                 </a>
                             )}
                         </div>
                     )}
                 </div>
-
             </div>
         </div>
     );
@@ -327,7 +282,7 @@ export default function Team() {
                         <div className={styles.labelDot} />
                         <span>{t("team.board")}</span>
                     </div>
-                    <h2 className={styles.heading}>
+                    <h2 className={`${styles.heading} display-text`}>
                         {t("team.heading")} <span className="gradient-text">{t("team.board") === "Executive Board" ? "Architects" : t("team.architects")}</span> <br />
                         {t("team.ofChange")}
                     </h2>
