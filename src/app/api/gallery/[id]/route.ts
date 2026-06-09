@@ -12,10 +12,10 @@ cloudinary.config({
 // DELETE - Remove gallery item
 export async function DELETE(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
-        const { id } = params;
+        const { id } = await params;
         const item = await findServerItem(id);
 
         if (!item) {
