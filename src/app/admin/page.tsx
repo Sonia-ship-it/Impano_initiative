@@ -21,10 +21,14 @@ export default function AdminPage() {
 
     const handleLogin = (e: React.FormEvent) => {
         e.preventDefault();
-        // Check for custom password or default
-        const savedPassword = localStorage.getItem("admin_password") || "impano2024admin";
+        // Check environment variable first, then localStorage, then default
+        const envPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD;
+        const savedPassword = localStorage.getItem("admin_password");
+        const defaultPassword = "impano2024admin";
         
-        if (password === savedPassword) {
+        const validPassword = envPassword || savedPassword || defaultPassword;
+        
+        if (password === validPassword) {
             sessionStorage.setItem("admin_auth", "authenticated");
             setIsAuthenticated(true);
             setError("");

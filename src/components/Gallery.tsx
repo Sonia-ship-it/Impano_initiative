@@ -25,14 +25,10 @@ export default function Gallery() {
             });
             const data = await response.json();
             
-            console.log("Gallery API response:", data);
-            
             // Always use API data, with fallback to default images
             if (data.items && data.items.length > 0) {
-                console.log("Using uploaded images:", data.items.length);
                 setItems(data.items);
             } else {
-                console.log("No uploaded images, using defaults");
                 setItems([
                     { id: "1", type: "image", title: "Children supported by the initiative", url: "/images/children.png" },
                     { id: "2", type: "image", title: "Hands joined together in unity", url: "/images/hands.jpg" },
@@ -82,9 +78,7 @@ export default function Gallery() {
                     </div>
                 ) : (
                     <div className={styles.galleryGrid}>
-                        {items.map((item, i) => {
-                            console.log(`Rendering item ${i}:`, item.type, item.url);
-                            return (
+                        {items.map((item, i) => (
                             <div
                                 key={item.id}
                                 className={styles.galleryItem}
@@ -132,7 +126,7 @@ export default function Gallery() {
                                     </div>
                                 )}
                             </div>
-                        )})}
+                        ))}
                     </div>
                 )}
             </div>
