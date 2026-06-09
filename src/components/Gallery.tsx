@@ -25,10 +25,14 @@ export default function Gallery() {
             });
             const data = await response.json();
             
-            // If no items from API, use default images
+            console.log("Gallery API response:", data);
+            
+            // Always use API data, with fallback to default images
             if (data.items && data.items.length > 0) {
+                console.log("Using uploaded images:", data.items.length);
                 setItems(data.items);
             } else {
+                console.log("No uploaded images, using defaults");
                 setItems([
                     { id: "1", type: "image", title: "Children supported by the initiative", url: "/images/children.png" },
                     { id: "2", type: "image", title: "Hands joined together in unity", url: "/images/hands.jpg" },
@@ -78,10 +82,12 @@ export default function Gallery() {
                     </div>
                 ) : (
                     <div className={styles.galleryGrid}>
-                        {items.map((item, i) => (
+                        {items.map((item, i) => {
+                            console.log(`Rendering item ${i}:`, item.type, item.url);
+                            return (
                             <div
                                 key={item.id}
-                                className={`${styles.galleryItem} reveal`}
+                                className={styles.galleryItem}
                                 style={{ transitionDelay: `${i * 0.1}s` }}
                             >
                                 {item.type === "video" ? (
@@ -104,12 +110,16 @@ export default function Gallery() {
                                     </div>
                                 ) : (
                                     <div className={styles.imageWrapper}>
-                                        <Image
+                                        <img
                                             src={item.url}
                                             alt={item.title}
-                                            fill
                                             className={styles.image}
-                                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                            loading="lazy"
+                                            onError={(e) => {
+                                                console.error("Image failed to load:", item.url);
+                                                e.currentTarget.src = '/images/hands.jpg'; // Fallback image
+                                            }}
                                         />
                                         <div className={styles.imageOverlay}>
                                             <div className={styles.overlayContent}>
@@ -122,7 +132,7 @@ export default function Gallery() {
                                     </div>
                                 )}
                             </div>
-                        ))}
+                        )})}
                     </div>
                 )}
             </div>

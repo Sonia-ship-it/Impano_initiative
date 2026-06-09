@@ -42,30 +42,50 @@ export async function POST(request: NextRequest) {
                 return NextResponse.json({ error: "No file provided" }, { status: 400 });
             }
 
-            // Convert file to base64 for Cloudinary upload
-            const bytes = await file.arrayBuffer();
-            const buffer = Buffer.from(bytes);
-            const base64 = buffer.toString("base64");
-            const dataUri = `data:${file.type};base64,${base64}`;
+            console.log("Uploading file:", file.name, file.type, file.size);
 
-            // Upload to Cloudinary
-            const uploadResult = await cloudinary.uploader.upload(dataUri, {
-                folder: process.env.CLOUDINARY_FOLDER || "impano-gallery",
-                public_id: `gallery-${id}`,
-                resource_type: "auto",
-            });
+            // Verify Cloudinary config
+            if (!process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET) {
+                console.error("Missing Cloudinary credentials");
+                return NextResponse.json({ error: "Server configuration error" }, { status: 500 });
+            }
 
-            const item: GalleryItem = {
-                id,
-                type: "image",
-                title,
-                url: uploadResult.secure_url,
-                publicId: uploadResult.public_id,
-                createdAt,
-            };
+            try {
+                // Convert file to base64 for Cloudinary upload
+                const bytes = await file.arrayBuffer();
+                const buffer = Buffer.from(bytes);
+                const base64 = buffer.toString("base64");
+                const dataUri = `data:${file.type};base64,${base64}`;
 
-            await addServerItem(item);
-            return NextResponse.json({ item });
+                console.log("Uploading to Cloudinary...");
+
+                // Upload to Cloudinary
+                const uploadResult = await cloudinary.uploader.upload(dataUri, {
+                    folder: process.env.CLOUDINARY_FOLDER || "impano-gallery",
+                    public_id: `gallery-${id}`,
+                    resource_type: "auto",
+                });
+
+                console.log("Upload successful:", uploadResult.public_id);
+
+                const item: GalleryItem = {
+                    id,
+                    type: "image",
+                    title,
+                    url: uploadResult.secure_url,
+                    publicId: uploadResult.public_id,
+                    createdAt,
+                };
+
+                await addServerItem(item);
+                return NextResponse.json({ item });
+            } catch (cloudinaryError) {
+                console.error("Cloudinary upload error:", cloudinaryError);
+                return NextResponse.json({ 
+                    error: "Cloudinary upload failed", 
+                    details: cloudinaryError instanceof Error ? cloudinaryError.message : "Unknown error" 
+                }, { status: 500 });
+            }
         } else if (type === "video") {
             const youtubeUrl = formData.get("youtubeUrl") as string;
             if (!youtubeUrl) {
