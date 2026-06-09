@@ -1,8 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import { unlink } from "fs/promises";
-import { existsSync } from "fs";
-import path from "path";
+import { v2 as cloudinary } from "cloudinary";
 import { removeServerItem, findServerItem } from "@/lib/galleryStore";
+
+// Configure Cloudinary
+cloudinary.config({
+    cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 // DELETE - Remove gallery item
 export async function DELETE(
@@ -17,15 +22,13 @@ export async function DELETE(
             return NextResponse.json({ error: "Item not found" }, { status: 404 });
         }
 
-        // If it's an image, delete the file
-        if (item.type === "image" && item.url.startsWith("/uploads/")) {
-            const filePath = path.join(process.cwd(), "public", item.url);
-            if (existsSync(filePath)) {
-                try {
-                    await unlink(filePath);
-                } catch (err) {
-                    console.error("Failed to delete file:", err);
-                }
+        // If it's an image stored on Cloudinary, delete it
+        if (item.type === "image" && item.publicId) {
+            try {
+                await cloudinary.uploader.destroy(item.publicId);
+            } catch (err) {
+                console.error("Failed to delete from Cloudinary:", err);
+                // Continue with metadata deletion even if Cloudinary fails
             }
         }
 

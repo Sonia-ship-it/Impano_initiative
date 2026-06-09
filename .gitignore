@@ -42,3 +42,6 @@ next-env.d.ts
 
 # gallery data (exclude from version control)
 /data
+
+# old local uploads (now using Cloudinary)
+/public/uploads

@@ -1,8 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import { writeFile, mkdir } from "fs/promises";
-import { existsSync } from "fs";
-import path from "path";
+import { v2 as cloudinary } from "cloudinary";
 import { getServerItems, addServerItem, type GalleryItem } from "@/lib/galleryStore";
+
+// Configure Cloudinary
+cloudinary.config({
+    cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 // Helper to extract YouTube video ID
 function getYouTubeVideoId(url: string): string | null {
@@ -37,24 +42,25 @@ export async function POST(request: NextRequest) {
                 return NextResponse.json({ error: "No file provided" }, { status: 400 });
             }
 
-            // Create uploads directory if it doesn't exist
-            const uploadsDir = path.join(process.cwd(), "public", "uploads");
-            if (!existsSync(uploadsDir)) {
-                await mkdir(uploadsDir, { recursive: true });
-            }
-
-            // Save file
+            // Convert file to base64 for Cloudinary upload
             const bytes = await file.arrayBuffer();
             const buffer = Buffer.from(bytes);
-            const fileName = `${id}-${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
-            const filePath = path.join(uploadsDir, fileName);
-            await writeFile(filePath, buffer);
+            const base64 = buffer.toString("base64");
+            const dataUri = `data:${file.type};base64,${base64}`;
+
+            // Upload to Cloudinary
+            const uploadResult = await cloudinary.uploader.upload(dataUri, {
+                folder: process.env.CLOUDINARY_FOLDER || "impano-gallery",
+                public_id: `gallery-${id}`,
+                resource_type: "auto",
+            });
 
             const item: GalleryItem = {
                 id,
                 type: "image",
                 title,
-                url: `/uploads/${fileName}`,
+                url: uploadResult.secure_url,
+                publicId: uploadResult.public_id,
                 createdAt,
             };
 
@@ -87,6 +93,9 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: "Invalid type" }, { status: 400 });
     } catch (error) {
         console.error("Upload error:", error);
-        return NextResponse.json({ error: "Upload failed" }, { status: 500 });
+        return NextResponse.json({ 
+            error: "Upload failed", 
+            details: error instanceof Error ? error.message : "Unknown error" 
+        }, { status: 500 });
     }
 }

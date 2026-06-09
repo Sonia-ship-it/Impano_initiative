@@ -1,5 +1,5 @@
-// Production-ready file-based persistence
-// Works on all hosting platforms without database setup
+// Cloudinary-based gallery storage
+// Images stored on Cloudinary CDN, metadata in JSON file
 
 import { readFile, writeFile, mkdir } from "fs/promises";
 import { existsSync } from "fs";
@@ -11,6 +11,7 @@ interface GalleryItem {
     title: string;
     url: string;
     videoId?: string;
+    publicId?: string; // Cloudinary public ID for deletion
     createdAt: string;
 }
 
