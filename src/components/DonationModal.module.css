@@ -66,7 +66,7 @@
 
 .header {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
 }
 
 .title {
@@ -81,117 +81,12 @@
     color: var(--gray-400);
 }
 
-/* Payment method tabs */
-.methodTabs {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    margin-bottom: 24px;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.07);
-    border-radius: 16px;
-    padding: 6px;
-}
-
-.methodTab {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 13px 16px;
-    border-radius: 12px;
-    border: none;
-    background: transparent;
-    color: var(--gray-400);
-    font-family: 'Outfit', sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.methodTab:hover {
-    color: var(--white);
-    background: rgba(255, 255, 255, 0.04);
-}
-
-.methodTabActive {
-    background: linear-gradient(135deg, var(--brand), var(--brand-light)) !important;
-    color: #050505 !important;
-    box-shadow: 0 4px 16px rgba(240, 150, 32, 0.25);
-}
-
-/* Card notice */
-.cardNotice {
-    display: flex;
-    align-items: flex-start;
-    gap: 8px;
-    padding: 12px 14px;
-    background: rgba(240, 150, 32, 0.06);
-    border: 1px solid rgba(240, 150, 32, 0.15);
-    border-radius: 12px;
-    font-size: 12px;
-    color: var(--gray-400);
-    line-height: 1.5;
-    margin-bottom: 4px;
-    margin-top: -4px;
-}
-
-/* Preset amount grid */
-.presetGrid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    margin-bottom: 20px;
-}
-
-.presetBtn {
-    background: rgba(var(--white-rgb), 0.03);
-    border: 1px solid rgba(var(--white-rgb), 0.08);
-    border-radius: 14px;
-    padding: 14px 8px;
-    color: var(--white);
-    font-weight: 700;
-    font-size: 15px;
-    cursor: pointer;
-    transition: all 0.25s ease;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2px;
-}
-
-.presetBtn small {
-    font-size: 10px;
-    font-weight: 500;
-    color: var(--gray-500);
-    letter-spacing: 0.5px;
-}
-
-.presetBtn:hover {
-    background: rgba(var(--white-rgb), 0.06);
-    border-color: rgba(var(--white-rgb), 0.15);
-    transform: translateY(-2px);
-}
-
-.presetActive {
-    background: rgba(var(--brand-rgb), 0.12) !important;
-    border-color: var(--brand) !important;
-    color: var(--brand) !important;
-}
-
-.presetActive small {
-    color: var(--brand) !important;
-    opacity: 0.7;
-}
-
 /* Form inputs */
 .inputGroup {
     display: flex;
     flex-direction: column;
     gap: 8px;
-    margin-bottom: 16px;
+    margin-bottom: 20px;
 }
 
 .label {
@@ -277,13 +172,13 @@
     border-radius: 12px;
     color: #f87171;
     font-size: 13px;
-    margin-bottom: 16px;
+    margin-bottom: 20px;
     animation: fadeIn 0.3s ease;
 }
 
 /* Security Trust */
 .trustArea {
-    margin-top: 20px;
+    margin-top: 24px;
     padding-top: 20px;
     border-top: 1px solid rgba(var(--white-rgb), 0.06);
     display: flex;
@@ -443,9 +338,5 @@
 @media (max-width: 480px) {
     .content {
         padding: 32px 20px;
-    }
-
-    .presetGrid {
-        grid-template-columns: repeat(2, 1fr);
     }
 }
