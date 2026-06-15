@@ -54,7 +54,8 @@
 .header {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
+    text-align: center;
     gap: 16px;
     margin-bottom: 80px;
 }
@@ -120,6 +121,7 @@
     color: var(--gray-500);
     max-width: 640px;
     line-height: 1.75;
+    margin: 0 auto;
 }
 
 .grid {
