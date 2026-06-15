@@ -57,12 +57,14 @@ async function ensureDataDir() {
 async function readItems(): Promise<GalleryItem[]> {
     if (KV_URL && KV_TOKEN) {
         const result = await queryKV(["GET", "gallery_items"]);
-        if (result) {
-            try {
-                return JSON.parse(result);
-            } catch (e) {
-                console.error("Failed to parse KV gallery items:", e);
-            }
+        if (result === null || result === undefined) {
+            return []; // Database is empty/new, return empty list
+        }
+        try {
+            return JSON.parse(result);
+        } catch (e) {
+            console.error("Failed to parse KV gallery items:", e);
+            return [];
         }
     }
 
@@ -85,6 +87,7 @@ async function readItems(): Promise<GalleryItem[]> {
 async function writeItems(items: GalleryItem[]): Promise<void> {
     if (KV_URL && KV_TOKEN) {
         await queryKV(["SET", "gallery_items", JSON.stringify(items)]);
+        return; // Success, do not write to local read-only filesystem on Vercel
     }
 
     try {
@@ -92,10 +95,7 @@ async function writeItems(items: GalleryItem[]): Promise<void> {
         await writeFile(DATA_FILE, JSON.stringify(items, null, 2));
     } catch (error) {
         console.error("Error writing gallery data:", error);
-        // Only throw if KV is not configured (to support read-only file systems on serverless)
-        if (!KV_URL || !KV_TOKEN) {
-            throw error;
-        }
+        throw error;
     }
 }
 
