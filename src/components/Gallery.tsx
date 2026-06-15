@@ -10,6 +10,7 @@ export default function Gallery() {
     const { t } = useLanguage();
     const [items, setItems] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
 
     useEffect(() => {
         fetchGalleryItems();
@@ -54,6 +55,56 @@ export default function Gallery() {
         }
     };
 
+    const handlePrevImage = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (selectedImageIndex === null) return;
+        
+        // Find previous image item index
+        let prevIdx = selectedImageIndex - 1;
+        while (prevIdx >= 0) {
+            if (items[prevIdx].type === "image") {
+                setSelectedImageIndex(prevIdx);
+                return;
+            }
+            prevIdx--;
+        }
+        
+        // Wrap around to end
+        let endIdx = items.length - 1;
+        while (endIdx > selectedImageIndex) {
+            if (items[endIdx].type === "image") {
+                setSelectedImageIndex(endIdx);
+                return;
+            }
+            endIdx--;
+        }
+    };
+
+    const handleNextImage = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (selectedImageIndex === null) return;
+        
+        // Find next image item index
+        let nextIdx = selectedImageIndex + 1;
+        while (nextIdx < items.length) {
+            if (items[nextIdx].type === "image") {
+                setSelectedImageIndex(nextIdx);
+                return;
+            }
+            nextIdx++;
+        }
+        
+        // Wrap around to start
+        let startIdx = 0;
+        while (startIdx < selectedImageIndex) {
+            if (items[startIdx].type === "image") {
+                setSelectedImageIndex(startIdx);
+                return;
+            }
+            startIdx++;
+        }
+    };
+
     return (
         <section className={styles.section} id="gallery" ref={ref}>
             <div className={styles.container}>
@@ -83,6 +134,11 @@ export default function Gallery() {
                                 key={item.id}
                                 className={styles.galleryItem}
                                 style={{ transitionDelay: `${i * 0.1}s` }}
+                                onClick={() => {
+                                    if (item.type === "image") {
+                                        setSelectedImageIndex(i);
+                                    }
+                                }}
                             >
                                 {item.type === "video" ? (
                                     <div className={styles.videoWrapper}>
@@ -130,6 +186,39 @@ export default function Gallery() {
                     </div>
                 )}
             </div>
+
+            {/* Lightbox Modal */}
+            {selectedImageIndex !== null && items[selectedImageIndex] && (
+                <div className={styles.lightbox} onClick={() => setSelectedImageIndex(null)}>
+                    <button className={styles.lightboxClose} onClick={() => setSelectedImageIndex(null)}>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                    
+                    <button className={styles.lightboxPrev} onClick={handlePrevImage}>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="15 18 9 12 15 6"></polyline>
+                        </svg>
+                    </button>
+
+                    <div className={styles.lightboxContent} onClick={(e) => e.stopPropagation()}>
+                        <img 
+                            src={items[selectedImageIndex].url} 
+                            alt={items[selectedImageIndex].title} 
+                            className={styles.lightboxImage}
+                        />
+                        <h3 className={styles.lightboxTitle}>{items[selectedImageIndex].title}</h3>
+                    </div>
+
+                    <button className={styles.lightboxNext} onClick={handleNextImage}>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </button>
+                </div>
+            )}
         </section>
     );
 }

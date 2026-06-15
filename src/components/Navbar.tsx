@@ -26,6 +26,13 @@ export default function Navbar() {
         { label: t("nav.contact"), href: "#contact" },
     ];
 
+    const isLinkActive = (linkHref: string) => {
+        if (linkHref.startsWith("/")) {
+            return pathname === linkHref;
+        }
+        return pathname === "/" && activeSection === linkHref.replace("#", "");
+    };
+
     useEffect(() => {
         const handleScroll = () => {
             setScrolled(window.scrollY > 40);
@@ -94,10 +101,7 @@ export default function Navbar() {
                         <a
                             key={link.href}
                             href={link.href}
-                            className={`${styles.navLink} ${activeSection === link.href.replace("#", "")
-                                ? styles.activeLink
-                                : ""
-                                }`}
+                            className={`${styles.navLink} ${isLinkActive(link.href) ? styles.activeLink : ""}`}
                             onClick={(e) => {
                                 e.preventDefault();
                                 handleClick(link.href);
@@ -141,10 +145,7 @@ export default function Navbar() {
                         <a
                             key={link.href}
                             href={link.href}
-                            className={`${styles.mobileLink} ${activeSection === link.href.replace("#", "")
-                                ? styles.activeMobile
-                                : ""
-                                }`}
+                            className={`${styles.mobileLink} ${isLinkActive(link.href) ? styles.activeMobile : ""}`}
                             onClick={(e) => {
                                 e.preventDefault();
                                 handleClick(link.href);
