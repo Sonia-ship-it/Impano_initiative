@@ -2,10 +2,11 @@
 import React, { useState, useEffect } from "react";
 import { useDonation } from "@/context/DonationContext";
 import { useLanguage } from "@/context/LanguageContext";
-import { X, Smartphone, Lock, CheckCircle, AlertCircle } from "lucide-react";
+import { X, Smartphone, CreditCard, Lock, CheckCircle, AlertCircle } from "lucide-react";
 import styles from "./DonationModal.module.css";
 
 type Step = "form" | "processing" | "success" | "error";
+type PayMethod = "momo" | "card";
 
 const presetAmounts = [500, 1000, 2000, 5000, 10000, 25000];
 
@@ -23,30 +24,49 @@ const AirtelIcon = () => (
     </svg>
 );
 
+const VisaIcon = () => (
+    <svg width="40" height="26" viewBox="0 0 40 26" fill="none">
+        <rect width="40" height="26" rx="4" fill="#1A1F71" />
+        <text x="20" y="18" textAnchor="middle" fill="white" fontWeight="bold" fontSize="11" fontFamily="Arial" fontStyle="italic">VISA</text>
+    </svg>
+);
+
+const MasterCardIcon = () => (
+    <svg width="40" height="26" viewBox="0 0 40 26" fill="none">
+        <rect width="40" height="26" rx="4" fill="#252525" />
+        <circle cx="15" cy="13" r="7" fill="#EB001B" />
+        <circle cx="25" cy="13" r="7" fill="#F79E1B" />
+        <path d="M20 7.5a7 7 0 0 1 0 11A7 7 0 0 1 20 7.5z" fill="#FF5F00" />
+    </svg>
+);
+
 export default function DonationModal() {
     const { isOpen, closeModal } = useDonation();
     const { t } = useLanguage();
     const [step, setStep] = useState<Step>("form");
+    const [payMethod, setPayMethod] = useState<PayMethod>("momo");
     const [amount, setAmount] = useState("");
     const [phone, setPhone] = useState("");
+    const [cardName, setCardName] = useState("");
+    const [cardEmail, setCardEmail] = useState("");
     const [errorMsg, setErrorMsg] = useState("");
     const [transactionRef, setTransactionRef] = useState("");
 
-    // Reset state when modal opens
     useEffect(() => {
         if (isOpen) {
             setStep("form");
             setAmount("");
             setPhone("");
+            setCardName("");
+            setCardEmail("");
             setErrorMsg("");
             setTransactionRef("");
+            setPayMethod("momo");
         }
     }, [isOpen]);
 
     const formatPhone = (value: string) => {
-        // Strip everything except digits
         const digits = value.replace(/\D/g, "");
-        // Remove leading +250 or 250
         const clean = digits.replace(/^(250)/, "");
         return clean.slice(0, 10);
     };
@@ -60,16 +80,49 @@ export default function DonationModal() {
 
     const detectedNetwork = getNetworkFromPhone(phone);
 
-    const handleDonate = async () => {
-        // Validate
+    const handleMomoDonate = async () => {
         if (!amount || parseFloat(amount) < 100) {
             setErrorMsg(t("donation.minAmount") || "Minimum donation is 100 RWF");
             return;
         }
-
         const cleanPhone = phone.replace(/\D/g, "").replace(/^(250)/, "");
         if (!cleanPhone.startsWith("07") || cleanPhone.length !== 10) {
             setErrorMsg(t("donation.invalidPhone") || "Please enter a valid phone number (07XXXXXXXX)");
+            return;
+        }
+        setErrorMsg("");
+        setStep("processing");
+        try {
+            const res = await fetch("/api/donate", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ amount: parseFloat(amount), phone: cleanPhone }),
+            });
+            const data = await res.json();
+            if (res.ok && data.success) {
+                setTransactionRef(data.ref || "");
+                setStep("success");
+            } else {
+                setErrorMsg(data.error || "Payment failed");
+                setStep("error");
+            }
+        } catch {
+            setErrorMsg("Network error. Please check your connection.");
+            setStep("error");
+        }
+    };
+
+    const handleCardDonate = async () => {
+        if (!amount || parseFloat(amount) < 100) {
+            setErrorMsg("Minimum donation is 100 RWF");
+            return;
+        }
+        if (!cardName.trim()) {
+            setErrorMsg("Please enter the cardholder name.");
+            return;
+        }
+        if (!cardEmail.trim() || !cardEmail.includes("@")) {
+            setErrorMsg("Please enter a valid email address.");
             return;
         }
 
@@ -77,22 +130,22 @@ export default function DonationModal() {
         setStep("processing");
 
         try {
-            const res = await fetch("/api/donate", {
+            const res = await fetch("/api/donate/card", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     amount: parseFloat(amount),
-                    phone: cleanPhone,
+                    name: cardName.trim(),
+                    email: cardEmail.trim(),
                 }),
             });
-
             const data = await res.json();
 
-            if (res.ok && data.success) {
-                setTransactionRef(data.ref || "");
-                setStep("success");
+            if (res.ok && data.paymentLink) {
+                // Redirect to Flutterwave's hosted payment page
+                window.location.href = data.paymentLink;
             } else {
-                setErrorMsg(data.error || "Payment failed");
+                setErrorMsg(data.error || "Card payment initiation failed.");
                 setStep("error");
             }
         } catch {
@@ -117,11 +170,26 @@ export default function DonationModal() {
                     {step === "form" && (
                         <>
                             <div className={styles.header}>
-                                <div className={styles.headerIconWrap}>
-                                    <Smartphone size={24} />
-                                </div>
                                 <h3 className={styles.title}>{t("donation.title")}</h3>
                                 <p className={styles.subtitle}>{t("donation.momoDesc")}</p>
+                            </div>
+
+                            {/* Payment method tabs */}
+                            <div className={styles.methodTabs}>
+                                <button
+                                    className={`${styles.methodTab} ${payMethod === "momo" ? styles.methodTabActive : ""}`}
+                                    onClick={() => { setPayMethod("momo"); setErrorMsg(""); }}
+                                >
+                                    <Smartphone size={18} />
+                                    <span>Mobile Money</span>
+                                </button>
+                                <button
+                                    className={`${styles.methodTab} ${payMethod === "card" ? styles.methodTabActive : ""}`}
+                                    onClick={() => { setPayMethod("card"); setErrorMsg(""); }}
+                                >
+                                    <CreditCard size={18} />
+                                    <span>Card</span>
+                                </button>
                             </div>
 
                             {/* Preset amounts */}
@@ -153,27 +221,59 @@ export default function DonationModal() {
                                 </div>
                             </div>
 
-                            {/* Phone number */}
-                            <div className={styles.inputGroup}>
-                                <label className={styles.label}>{t("donation.phone")}</label>
-                                <div className={styles.phoneInputWrap}>
-                                    <input
-                                        type="tel"
-                                        className={styles.input}
-                                        placeholder="078 XXX XXXX"
-                                        value={phone}
-                                        onChange={(e) => setPhone(formatPhone(e.target.value))}
-                                        maxLength={10}
-                                    />
-                                    {detectedNetwork && (
-                                        <div className={styles.networkBadge}>
-                                            {detectedNetwork === "MTN" ? <MTNIcon /> : <AirtelIcon />}
-                                        </div>
-                                    )}
+                            {/* === MOBILE MONEY FIELDS === */}
+                            {payMethod === "momo" && (
+                                <div className={styles.inputGroup}>
+                                    <label className={styles.label}>{t("donation.phone")}</label>
+                                    <div className={styles.phoneInputWrap}>
+                                        <input
+                                            type="tel"
+                                            className={styles.input}
+                                            placeholder="078 XXX XXXX"
+                                            value={phone}
+                                            onChange={(e) => setPhone(formatPhone(e.target.value))}
+                                            maxLength={10}
+                                        />
+                                        {detectedNetwork && (
+                                            <div className={styles.networkBadge}>
+                                                {detectedNetwork === "MTN" ? <MTNIcon /> : <AirtelIcon />}
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
-                            </div>
+                            )}
 
-                            {/* Error message */}
+                            {/* === CARD FIELDS === */}
+                            {payMethod === "card" && (
+                                <>
+                                    <div className={styles.inputGroup}>
+                                        <label className={styles.label}>Cardholder Name</label>
+                                        <input
+                                            type="text"
+                                            className={styles.input}
+                                            placeholder="Full name as on card"
+                                            value={cardName}
+                                            onChange={(e) => setCardName(e.target.value)}
+                                        />
+                                    </div>
+                                    <div className={styles.inputGroup}>
+                                        <label className={styles.label}>Email Address</label>
+                                        <input
+                                            type="email"
+                                            className={styles.input}
+                                            placeholder="your@email.com"
+                                            value={cardEmail}
+                                            onChange={(e) => setCardEmail(e.target.value)}
+                                        />
+                                    </div>
+                                    <div className={styles.cardNotice}>
+                                        <Lock size={12} />
+                                        <span>You will be redirected to Flutterwave's secure payment page to enter your card details.</span>
+                                    </div>
+                                </>
+                            )}
+
+                            {/* Error */}
                             {errorMsg && (
                                 <div className={styles.errorBanner}>
                                     <AlertCircle size={14} />
@@ -181,24 +281,35 @@ export default function DonationModal() {
                                 </div>
                             )}
 
-                            {/* Donate button */}
+                            {/* CTA */}
                             <button
                                 className={styles.actionBtn}
-                                onClick={handleDonate}
-                                disabled={!amount || !phone}
+                                onClick={payMethod === "momo" ? handleMomoDonate : handleCardDonate}
+                                disabled={!amount || (payMethod === "momo" ? !phone : !cardName || !cardEmail)}
                             >
-                                {t("donation.cta")} — {amount ? `${parseInt(amount).toLocaleString()} RWF` : "0 RWF"}
+                                {payMethod === "momo"
+                                    ? `${t("donation.cta")} — ${amount ? `${parseInt(amount).toLocaleString()} RWF` : "0 RWF"}`
+                                    : `Pay with Card — ${amount ? `${parseInt(amount).toLocaleString()} RWF` : "0 RWF"}`
+                                }
                             </button>
 
                             {/* Trust bar */}
                             <div className={styles.trustArea}>
                                 <div className={styles.trustText}>
                                     <Lock size={12} />
-                                    <span>{t("donation.securePayment")} <strong>Paypack</strong></span>
+                                    <span>
+                                        {payMethod === "momo"
+                                            ? <>{t("donation.securePayment")} <strong>Paypack</strong></>
+                                            : <>Secured by <strong>Flutterwave</strong></>
+                                        }
+                                    </span>
                                 </div>
                                 <div className={styles.badgeRow}>
-                                    <MTNIcon />
-                                    <AirtelIcon />
+                                    {payMethod === "momo" ? (
+                                        <><MTNIcon /><AirtelIcon /></>
+                                    ) : (
+                                        <><VisaIcon /><MasterCardIcon /></>
+                                    )}
                                 </div>
                             </div>
                         </>
@@ -207,16 +318,21 @@ export default function DonationModal() {
                     {step === "processing" && (
                         <div className={styles.statusContainer}>
                             <div className={styles.statusIcon} style={{ color: "var(--brand)" }}>
-                                <div className={styles.spinner} />
+                                <div className={styles.spinnerLarge} />
                             </div>
-                            <h3 className={styles.statusTitle}>{t("donation.processing")}</h3>
+                            <h3 className={styles.statusTitle}>{payMethod === "momo" ? t("donation.processing") : "Redirecting to payment..."}</h3>
                             <p className={styles.statusDesc}>
-                                {t("donation.processingDesc")}
+                                {payMethod === "momo"
+                                    ? t("donation.processingDesc")
+                                    : "Please wait while we prepare your secure payment page."
+                                }
                             </p>
-                            <div className={styles.phonePromptHint}>
-                                <Smartphone size={20} style={{ color: "var(--brand)" }} />
-                                <span>{t("donation.checkPhone") || "A prompt has been sent to your phone. Enter your PIN to confirm."}</span>
-                            </div>
+                            {payMethod === "momo" && (
+                                <div className={styles.phonePromptHint}>
+                                    <Smartphone size={20} style={{ color: "var(--brand)" }} />
+                                    <span>{t("donation.checkPhone") || "A prompt has been sent to your phone. Enter your PIN to confirm."}</span>
+                                </div>
+                            )}
                         </div>
                     )}
 
@@ -229,12 +345,7 @@ export default function DonationModal() {
                             <p className={styles.statusDesc}>
                                 {t("donation.thankYou") || "Thank you for your generous donation! Your support makes a real difference in children's lives."}
                                 {transactionRef && (
-                                    <>
-                                        <br /><br />
-                                        <small style={{ opacity: 0.6 }}>
-                                            {t("donation.transactionId")}: {transactionRef}
-                                        </small>
-                                    </>
+                                    <><br /><br /><small style={{ opacity: 0.6 }}>{t("donation.transactionId")}: {transactionRef}</small></>
                                 )}
                             </p>
                             <button className={styles.actionBtn} onClick={closeModal}>

@@ -11,6 +11,7 @@ export default function Gallery() {
     const [items, setItems] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
+    const [selectedVideo, setSelectedVideo] = useState<any | null>(null);
 
     useEffect(() => {
         fetchGalleryItems();
@@ -137,6 +138,8 @@ export default function Gallery() {
                                 onClick={() => {
                                     if (item.type === "image") {
                                         setSelectedImageIndex(i);
+                                    } else if (item.type === "video") {
+                                        setSelectedVideo(item);
                                     }
                                 }}
                             >
@@ -217,6 +220,29 @@ export default function Gallery() {
                             <polyline points="9 18 15 12 9 6"></polyline>
                         </svg>
                     </button>
+                </div>
+            )}
+
+            {/* Video Lightbox Modal */}
+            {selectedVideo && (
+                <div className={styles.lightbox} onClick={() => setSelectedVideo(null)}>
+                    <button className={styles.lightboxClose} onClick={() => setSelectedVideo(null)}>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                    <div className={styles.lightboxVideoContent} onClick={(e) => e.stopPropagation()}>
+                        <iframe
+                            src={`https://www.youtube.com/embed/${selectedVideo.videoId}?autoplay=1&rel=0`}
+                            title={selectedVideo.title}
+                            frameBorder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                            className={styles.lightboxVideoFrame}
+                        />
+                        <h3 className={styles.lightboxTitle}>{selectedVideo.title}</h3>
+                    </div>
                 </div>
             )}
         </section>
