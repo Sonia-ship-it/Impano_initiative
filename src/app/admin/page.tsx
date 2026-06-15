@@ -149,17 +149,22 @@ function PasswordManager() {
     const [currentPassword, setCurrentPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [savedPassword, setSavedPassword] = useState("");
     const [error, setError] = useState("");
     const [success, setSuccess] = useState(false);
+
+    useEffect(() => {
+        if (showModal) {
+            const envPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD;
+            const defaultPassword = "impano2024admin";
+            setSavedPassword(localStorage.getItem("admin_password") || envPassword || defaultPassword);
+        }
+    }, [showModal]);
 
     const handleChangePassword = (e: React.FormEvent) => {
         e.preventDefault();
         setError("");
         setSuccess(false);
-
-        const envPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD;
-        const defaultPassword = "impano2024admin";
-        const savedPassword = localStorage.getItem("admin_password") || envPassword || defaultPassword;
 
         if (currentPassword !== savedPassword) {
             setError("Current password is incorrect");
@@ -224,6 +229,16 @@ function PasswordManager() {
                                     required
                                     className={styles.input}
                                 />
+                                {currentPassword && (
+                                    <span style={{ 
+                                        fontSize: "12px", 
+                                        marginTop: "4px", 
+                                        display: "block",
+                                        color: currentPassword === savedPassword ? "#3a9948" : "#ef4444" 
+                                    }}>
+                                        {currentPassword === savedPassword ? "✓ Current password matches" : "✗ Does not match current password"}
+                                    </span>
+                                )}
                             </div>
 
                             <div className={styles.formGroup}>
@@ -237,6 +252,16 @@ function PasswordManager() {
                                     required
                                     className={styles.input}
                                 />
+                                {newPassword && (
+                                    <span style={{ 
+                                        fontSize: "12px", 
+                                        marginTop: "4px", 
+                                        display: "block",
+                                        color: newPassword.length >= 8 ? "#3a9948" : "#ef4444" 
+                                    }}>
+                                        {newPassword.length >= 8 ? "✓ Valid password length" : "✗ New password must be at least 8 characters"}
+                                    </span>
+                                )}
                             </div>
 
                             <div className={styles.formGroup}>
@@ -250,6 +275,16 @@ function PasswordManager() {
                                     required
                                     className={styles.input}
                                 />
+                                {confirmPassword && (
+                                    <span style={{ 
+                                        fontSize: "12px", 
+                                        marginTop: "4px", 
+                                        display: "block",
+                                        color: confirmPassword === newPassword ? "#3a9948" : "#ef4444" 
+                                    }}>
+                                        {confirmPassword === newPassword ? "✓ Passwords match" : "✗ Passwords do not match"}
+                                    </span>
+                                )}
                             </div>
 
                             {error && <div className={styles.error}>{error}</div>}
@@ -267,7 +302,11 @@ function PasswordManager() {
                                 <button type="button" onClick={() => setShowModal(false)} className={styles.cancelBtn}>
                                     Cancel
                                 </button>
-                                <button type="submit" className={styles.submitBtn}>
+                                <button 
+                                    type="submit" 
+                                    className={styles.submitBtn}
+                                    disabled={currentPassword !== savedPassword || newPassword.length < 8 || newPassword !== confirmPassword}
+                                >
                                     Update Password
                                 </button>
                             </div>
