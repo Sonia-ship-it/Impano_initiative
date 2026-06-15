@@ -21,12 +21,12 @@ export default function AdminPage() {
 
     const handleLogin = (e: React.FormEvent) => {
         e.preventDefault();
-        // Check environment variable first, then localStorage, then default
+        // Prioritize local storage (user password changes) first, then environment variable, then default
         const envPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD;
         const savedPassword = localStorage.getItem("admin_password");
         const defaultPassword = "impano2024admin";
         
-        const validPassword = envPassword || savedPassword || defaultPassword;
+        const validPassword = savedPassword || envPassword || defaultPassword;
         
         if (password === validPassword) {
             sessionStorage.setItem("admin_auth", "authenticated");
@@ -157,7 +157,9 @@ function PasswordManager() {
         setError("");
         setSuccess(false);
 
-        const savedPassword = localStorage.getItem("admin_password") || "impano2024admin";
+        const envPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD;
+        const defaultPassword = "impano2024admin";
+        const savedPassword = localStorage.getItem("admin_password") || envPassword || defaultPassword;
 
         if (currentPassword !== savedPassword) {
             setError("Current password is incorrect");

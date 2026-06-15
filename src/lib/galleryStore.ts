@@ -18,6 +18,34 @@ interface GalleryItem {
 const DATA_DIR = path.join(process.cwd(), "data");
 const DATA_FILE = path.join(DATA_DIR, "gallery.json");
 
+// KV Configuration
+const KV_URL = process.env.KV_REST_API_URL;
+const KV_TOKEN = process.env.KV_REST_API_TOKEN;
+
+// Helper to query Vercel KV REST API
+async function queryKV(command: string[]): Promise<any> {
+    if (!KV_URL || !KV_TOKEN) return null;
+    try {
+        const response = await fetch(KV_URL, {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${KV_TOKEN}`,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(command),
+        });
+        if (!response.ok) {
+            console.error("KV error response:", await response.text());
+            return null;
+        }
+        const data = await response.json();
+        return data.result;
+    } catch (e) {
+        console.error("Error querying KV:", e);
+        return null;
+    }
+}
+
 // Ensure data directory exists
 async function ensureDataDir() {
     if (!existsSync(DATA_DIR)) {
@@ -25,8 +53,19 @@ async function ensureDataDir() {
     }
 }
 
-// Read items from file
+// Read items from KV or file
 async function readItems(): Promise<GalleryItem[]> {
+    if (KV_URL && KV_TOKEN) {
+        const result = await queryKV(["GET", "gallery_items"]);
+        if (result) {
+            try {
+                return JSON.parse(result);
+            } catch (e) {
+                console.error("Failed to parse KV gallery items:", e);
+            }
+        }
+    }
+
     try {
         await ensureDataDir();
         if (!existsSync(DATA_FILE)) {
@@ -42,14 +81,21 @@ async function readItems(): Promise<GalleryItem[]> {
     }
 }
 
-// Write items to file
+// Write items to KV or file
 async function writeItems(items: GalleryItem[]): Promise<void> {
+    if (KV_URL && KV_TOKEN) {
+        await queryKV(["SET", "gallery_items", JSON.stringify(items)]);
+    }
+
     try {
         await ensureDataDir();
         await writeFile(DATA_FILE, JSON.stringify(items, null, 2));
     } catch (error) {
         console.error("Error writing gallery data:", error);
-        throw error;
+        // Only throw if KV is not configured (to support read-only file systems on serverless)
+        if (!KV_URL || !KV_TOKEN) {
+            throw error;
+        }
     }
 }
 
