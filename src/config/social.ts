@@ -10,7 +10,7 @@ export interface SocialLink {
 }
 
 export const initiativeContact = {
-    email: "Impanoinitiative@gmail.com",
+    email: "Impanoinitiativefunds@gmail.com",
     location: "Rwanda",
     coords: "1°56'S · 30°04'E",
     social: [
